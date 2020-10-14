@@ -85,7 +85,7 @@ class Poly:
         self.data.reverse()
         out = ""
         for i in range(degree - 1, -1, -1):
-            n = self.data[i]
+            n = self.data[i] % self.m
             if n != 0:
                 if n > 0 and i != degree - 1:
                     out += "+"
@@ -120,7 +120,7 @@ class Poly:
                 if ap[i] != 0 and bp[j] != 0:
                     p[i + j] += ap[i] * bp[j]
         p.reverse()
-        return Poly(p, self.m).trim()
+        return (Poly(p, self.m) % self.m).trim()
 
     # + for poly
     def __add__(self, other):
@@ -131,7 +131,7 @@ class Poly:
         for i in range(other.deg()):
             ap[i] += bp[i]
         ap.reverse()
-        return Poly(ap, self.m)
+        return (Poly(ap, self.m) % self.m).trim()
 
     # - for poly
     def __sub__(self, other):
@@ -142,7 +142,7 @@ class Poly:
         for i in range(other.deg()):
             ap[i] -= bp[i]
         ap.reverse()
-        return Poly(ap, self.m).trim()
+        return (Poly(ap, self.m) % self.m).trim()
 
     # make copy of poly
     def copy(self):
@@ -171,7 +171,7 @@ class Poly:
             r = (r - nb) % self.m
             deg_r = r.deg() - 1
         q.reverse()
-        return Poly(q, self.m).trim(), r
+        return (Poly(q, self.m) % self.m).trim(), r.trim()
 
     # gcd of poly and other poly, doesnt work due to floats i think
     def gcd(self, other):

@@ -173,17 +173,14 @@ class Poly:
         q.reverse()
         return (Poly(q, self.m) % self.m).trim(), r.trim()
 
-    # gcd of poly and other poly, doesnt work due to floats i think
+    # gcd of two polynomials, uses euclid's extended algorithm under the hoot
     def gcd(self, other):
-        a = self.copy()
-        b = other.copy()
-        while b.deg() > 0:
-            b, a = a - b, b
-        return Poly(1 / a.lc(), self.m)
+        return self.euclid(other)[2]
 
-    # extended euclidean algorithm for poly
+    # extended euclidean algorithm for polynomials
+    # Based on algorithm 2.2.11 from the script
     def euclid(self, other):
-        x, v, y, u = Poly(1, self.m), Poly(1, self.m), Poly(0, self.m), Poly(0, self.m)
+        x, v, y, u = Poly([1], self.m), Poly([1], self.m), Poly([0], self.m), Poly([0], self.m)
         a, b = self.copy(), other.copy()
         while b > Poly(0, self.m):
             q, r = a / b
@@ -195,8 +192,11 @@ class Poly:
             y = v
             u = xp - q * u
             v = yp - q * v
-        lca = 1 / a.lc()
-        return x * lca, y * lca
+
+        a_inv = modular_inverse(a.lc(), mod=self.m, return_poly=True)
+        a = x * a_inv
+        b = y * a_inv
+        return a, b, a * self + b * other
 
     # length of poly, includes leading zeroes, whereas deg() does not
     def __len__(self):
@@ -236,7 +236,7 @@ class Poly:
             # get everything to the right of x^(degm-1) term
             output = Poly(self.data[-degm + 1:], self.m)
             # get everything else to get x^(degm-1) (f*x^(deg-1) + ... + g)
-            rest = data[:-degm+1]
+            rest = data[:-degm + 1]
             # for each term in the rest get product with rhs for substitution
             for i in range(len(rest)):
                 step = rhs.copy()
@@ -245,7 +245,7 @@ class Poly:
                     # get product
                     step[j] *= rest[i]
                 # pad with zeroes to match degree of term
-                step += [0] * (len(rest)-i-1)
+                step += [0] * (len(rest) - i - 1)
                 # add step to current answer
                 output += Poly(step, self.m)
 
@@ -311,7 +311,7 @@ class Poly:
                     n -= 1
                 x *= x
                 n /= 2
-            return z*x
+            return z * x
         else:
             print(x, x % self.m)
             while n > 1:
@@ -341,6 +341,19 @@ class Poly:
     #         x.shift_first_element(q)
     #         t += 1
     #     return t == q
+
+
+# modular inverse of an integer
+def modular_inverse(n: int, mod, return_poly=False):
+    assert (n != 0 and mod > 0)
+
+    for i in range(1, mod + 1):
+        if (i * n) % mod == 1:
+            if return_poly:
+                return Poly([i], m=mod)
+            else:
+                return i
+    raise AssertionError
 
 
 # print(Poly('6X^5+5X^3+5X^2+2X+2', 3))

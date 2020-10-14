@@ -92,38 +92,55 @@ for exercise in my_exercises['exercises']:
 
         print("{} :".format(exercise))
         print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer r: [{}] - Correct answer r: [{}]\n"
-              .format(answ_q == params['answ-q'] and answ_r == params['answ-r'], answ_q, params['answ-q'], answ_r,
+              .format(answ_q == params['answ-q'] and answ_q_poly == params['answ-q-poly'] and answ_r == params[
+            'answ-r'] and answ_r_poly == params['answ-r-poly'], answ_q, params['answ-q'], answ_r,
                       params['answ-r']))
         params['answ-q'] = answ_q
         params['answ-q-poly'] = answ_q_poly
         params['answ-r'] = answ_r
         params['answ-r-poly'] = answ_r_poly
 
-    # if operation == 'euclid-poly':
-    #     poly = Poly(params['f'], m=params['mod'])
-    #     poly2 = Poly(params['g'], m=params['mod'])
-    #     own_answer, own_answer_poly = "", [] # str(poly.euclid(poly2)), poly.euclid(poly2).data
-    #
-    #     print("{} :".format(exercise))
-    #     print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: [{}]\n"
-    #           .format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer, params['answer'], own_answer_poly, params['answer-poly']))
-    #     params['answer'] = own_answer
-    #     params['answer-poly'] = own_answer_poly
-
-    if operation == 'euclid-poly-mod':
+    if operation == 'euclid-poly':
         poly = Poly(params['f'], m=params['mod'])
         poly2 = Poly(params['g'], m=params['mod'])
-        poly3 = Poly(params['h'], m=params['mod'])
-        # TODO change method name
-        own_answer, own_answer_poly = str(poly * poly2), (poly * poly2).data
+
+        try:
+            ans_a, ans_b, ans_d = poly.euclid(poly2)
+            answ_a, answ_a_poly = str(ans_a), ans_a.data
+            answ_b, answ_b_poly = str(ans_b), ans_b.data
+            answ_d, answ_d_poly = str(ans_d), ans_d.data
+        except AssertionError:
+            answ_a, answ_a_poly = "ERROR", []
+            answ_b, answ_b_poly = "ERROR", []
+            answ_d, answ_d_poly = "ERROR", []
 
         print("{} :".format(exercise))
         print(
-            "Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: [{}]\n"
-                .format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
-                        params['answer'], own_answer_poly, params['answer-poly']))
+            "Correct: {} - Own answer a: [{}] - Correct answer a: [{}] || Own answer b: [{}] - Correct answer b: [{}] || Own answer d: [{}] - Correct answer d: [{}]\n"
+            .format(answ_a == params['answ-a'] and answ_a_poly == params['answ-a-poly'] and answ_b == params['answ-b']
+                    and answ_b_poly == params['answ-b-poly'] and answ_d == params['answ-d'] and
+                    answ_d_poly == params['answ-d-poly'], answ_a, params['answ-a'], answ_b, params['answ-b'], answ_d,
+                    params['answ-d']))
+        params['answ-a'] = answ_a
+        params['answ-a-poly'] = answ_a_poly
+        params['answ-b'] = answ_b
+        params['answ-b-poly'] = answ_b_poly
+        params['answ-d'] = answ_d
+        params['answ-d-poly'] = answ_d_poly
+
+    if operation == 'equals-poly-mod':
+        poly = Poly(params['f'], m=params['mod'])
+        poly2 = Poly(params['g'], m=params['mod'])
+        poly3 = Poly(params['h'], m=params['mod'])
+
+        # TODO call method
+        own_answer = None
+
+        print("{} :".format(exercise))
+        print(
+            "Correct: {} - Own answer: [{}] - Correct answer: [{}]\n".format(own_answer == params['answer'],
+                                                                             own_answer, params['answer']))
         params['answer'] = own_answer
-        params['answer-poly'] = own_answer_poly
 
     if operation == 'irreducible':
         poly = Poly(params['f'], m=params['mod'])

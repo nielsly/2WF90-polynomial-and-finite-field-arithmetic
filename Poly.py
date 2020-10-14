@@ -86,12 +86,12 @@ class Poly:
             n = self.data[i]
             if n != 0:
                 if n > 0 and i != degree - 1:
-                    out += " + "
+                    out += "+"
                 elif n < 0:
                     if i == degree - 1:
                         out += "-"
                     else:
-                        out += " - "
+                        out += "-"
                 if abs(n) != 1 or i == 0:
                     out += str(abs(n))
                 if i > 0:

@@ -1,0 +1,197 @@
+Poly DEFINITIONS ::= BEGIN
+
+	Exercises ::= SET {
+		exercises SEQUENCE OF Exercise
+	}
+
+    Poly ::= SEQUENCE OF INTEGER
+
+    Row ::= SEQUENCE OF IA5String
+
+    RowPoly ::= SEQUENCE OF Poly
+
+    DisplayPoly ::= SET {
+        mod	INTEGER,
+        f Poly,
+        answer IA5String
+    }
+
+    AddPoly ::= SET {
+        mod INTEGER,
+        f Poly,
+        g Poly,
+        answer IA5String,
+        answer-poly Poly
+    }
+
+    SubtractPoly ::= SET {
+        mod INTEGER,
+        f Poly,
+        g Poly,
+        answer IA5String,
+        answer-poly Poly
+    }
+
+    MultiplyPoly ::= SET {
+        mod INTEGER,
+        f Poly,
+        g Poly,
+        answer IA5String,
+        answer-poly Poly
+    }
+
+    LongDivPoly ::= SET {
+        mod INTEGER,
+        f Poly,
+        g Poly,
+        answ-q IA5String,
+        answ-r IA5String,
+        answ-q-poly Poly,
+        answ-r-poly Poly
+    }
+
+    EuclidPoly ::= SET {
+        mod INTEGER,
+        f Poly,
+        g Poly,
+        answ-a IA5String,
+        answ-b IA5String,
+        answ-d IA5String,
+        answ-a-poly Poly,
+        answ-b-poly Poly,
+        answ-d-poly Poly
+    }
+
+    EqualsPolyMod ::= SET {
+        mod INTEGER,
+        f Poly,
+        g Poly,
+        h Poly,
+        answer BOOLEAN
+    }
+
+    Irreducible ::= SET {
+        mod INTEGER,
+        f Poly,
+        answer BOOLEAN
+    }
+
+    FindIrred ::= SET {
+        mod INTEGER,
+        deg INTEGER,
+        answer IA5String,
+        answer-poly Poly
+    }
+
+    AddTable ::= SET {
+        mod INTEGER,
+        mod-poly Poly,
+        answer SEQUENCE OF Row,
+        answer-poly SEQUENCE OF RowPoly
+    }
+
+    MultTable ::= SET {
+        mod INTEGER,
+        mod-poly Poly,
+        answer SEQUENCE OF Row,
+        answer-poly SEQUENCE OF RowPoly
+    }
+
+    DisplayField ::= SET {
+        mod INTEGER,
+        mod-poly Poly,
+        a Poly,
+        answer IA5String,
+        answer-poly Poly
+    }
+
+    AddField ::= SET {
+        mod INTEGER,
+        mod-poly Poly,
+        a Poly,
+        b Poly,
+        answer IA5String,
+        answer-poly Poly
+    }
+
+    SubtractField ::= SET {
+        mod INTEGER,
+        mod-poly Poly,
+        a Poly,
+        b Poly,
+        answer IA5String,
+        answer-poly Poly
+    }
+
+    MultiplyField ::= SET {
+        mod INTEGER,
+        mod-poly Poly,
+        a Poly,
+        b Poly,
+        answer IA5String,
+        answer-poly Poly
+    }
+
+    InverseField ::= SET {
+        mod INTEGER,
+        mod-poly Poly,
+        a Poly,
+        answer IA5String,
+        answer-poly Poly
+    }
+
+    DivisionField ::= SET {
+        mod INTEGER,
+        mod-poly Poly,
+        a Poly,
+        b Poly,
+        answer IA5String,
+        answer-poly Poly
+    }
+
+    EqualsField ::= SET {
+        mod INTEGER,
+        mod-poly Poly,
+        a Poly,
+        b Poly,
+        answer BOOLEAN
+    }
+
+    Primitive ::= SET {
+        mod INTEGER,
+        mod-poly Poly,
+        a Poly,
+        answer BOOLEAN
+    }
+
+    FindPrim ::= SET {
+        mod INTEGER,
+        mod-poly Poly,
+        answer IA5String,
+        answer-poly Poly
+    }
+
+    Exercise ::= CHOICE {
+        display-poly DisplayPoly,
+        add-poly AddPoly,
+        subtract-poly SubtractPoly,
+        multiply-poly MultiplyPoly,
+        long-div-poly LongDivPoly,
+        euclid-poly EuclidPoly,
+        equals-poly-mod EqualsPolyMod,
+        irreducible Irreducible,
+        find-irred FindIrred,
+        add-table AddTable,
+        mult-table MultTable,
+        display-field DisplayField,
+        add-field AddField,
+        subtract-field SubtractField,
+        multiply-field MultiplyField,
+        inverse-field InverseField,
+        division-field DivisionField,
+        equals-field EqualsField,
+        primitive Primitive,
+        find-prim FindPrim
+    }
+
+END

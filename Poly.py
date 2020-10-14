@@ -1,6 +1,7 @@
 class Poly:
     # initialise the Poly, intputs can be int, list or string, degree is used if a single integer or empty string is entered
-    def __init__(self, a: int or list or str, degree: int = 0):
+    def __init__(self, a: int or list or str, m: int = 0, degree: int = 0):
+        self.m = m
         if type(a) == str:
             a = a.split(' ')
             if len(a) == 1:
@@ -31,9 +32,9 @@ class Poly:
                 if spl[0].endswith('X'):
                     if spl[0] == '-X':
                         if len(spl) == 1:
-                            p[degree - 1] = -1 if a[i - 1] == '+' else 1
+                            p[degree - 1] = 1 if a[i - 1] == '+' else -1
                         else:
-                            p[degree - int(spl[1])] = 1 if a[i - 1] == '+' else 1
+                            p[degree - int(spl[1])] = 1 if a[i - 1] == '+' else -1
                     elif spl[0] == 'X':
                         if len(spl) == 1:
                             p[degree - 1] = 1 if a[i - 1] == '+' else -1
@@ -58,6 +59,7 @@ class Poly:
         elif type(a) == list:
             self.data = a
             self.degree = degree
+            self.degree = self.deg()
         else:
             raise TypeError('Type Poly requires type str, int or list, not ' + str(type(a)))
 
@@ -118,7 +120,7 @@ class Poly:
                 if ap[i] != 0 and bp[j] != 0:
                     p[i + j] += ap[i] * bp[j]
         p.reverse()
-        return Poly(p).trim()
+        return Poly(p, self.m).trim()
 
     # + for poly
     def __add__(self, other):
@@ -129,7 +131,7 @@ class Poly:
         for i in range(other.deg()):
             ap[i] += bp[i]
         ap.reverse()
-        return Poly(ap)
+        return Poly(ap, self.m)
 
     # - for poly
     def __sub__(self, other):
@@ -140,26 +142,26 @@ class Poly:
         for i in range(other.deg()):
             ap[i] -= bp[i]
         ap.reverse()
-        return Poly(ap).trim()
+        return Poly(ap, self.m).trim()
 
     # make copy of poly
     def copy(self):
-        return Poly(self.data)
+        return Poly(self.data, self.m)
 
     # / for poly
     def __truediv__(self, other):
         q = [0] * (self.deg() + other.deg())
         r = self.copy()
         deg_r, deg_b = r.deg(), other.deg()
-        while r > Poly(0) and deg_r >= deg_b:
+        while r > Poly(0, self.m) and deg_r >= deg_b:
             lc_div = r.lc() // other.lc()
             q[deg_r - deg_b] += lc_div
-            n = Poly(lc_div, deg_r - deg_b)
+            n = Poly(lc_div, self.m, deg_r - deg_b)
             nb = n * other
             r = r - nb
             deg_r = r.deg()
         q.reverse()
-        return Poly(q).trim(), r
+        return Poly(q, self.m).trim(), r
 
     # gcd of poly and other poly, doesnt work due to floats i think
     def gcd(self, other):
@@ -167,13 +169,13 @@ class Poly:
         b = other.copy()
         while b.deg() > 0:
             b, a = a - b, b
-        return Poly(1 / a.lc())
+        return Poly(1 / a.lc(), self.m)
 
     # extended euclidean algorithm for poly
     def euclid(self, other):
-        x, v, y, u = Poly(1), Poly(1), Poly(0), Poly(0)
+        x, v, y, u = Poly(1, self.m), Poly(1, self.m), Poly(0, self.m), Poly(0, self.m)
         a, b = self.copy(), other.copy()
-        while b > Poly(0):
+        while b > Poly(0, self.m):
             q, r = a / b
             a = b
             b = r
@@ -198,15 +200,50 @@ class Poly:
         return self
 
     # % for poly, currently only works with ints
-    def __mod__(self, other):
-        a = self.data.copy()
-        m = other
-        for i in range(len(a)):
-            while a[i] < 0:
-                a[i] += m
-            while a[i] >= m:
-                a[i] -= m
-        return Poly(a)
+    def __mod__(self, m):
+        if type(m) == int:
+            a = self.data.copy()
+            for i in range(len(a)):
+                a[i] %= m
+            return Poly(a, self.m)
+        elif type(m) == Poly:
+            degm = m.deg()
+            if len(self.data) < degm:
+                return Poly(self.data, self.m) % self.m
+            m.trim()
+            # lc*x^(degm-1) + (bx^j + ... + c) = 0 => lc*x^(degm-1) = -bx^j - ... - c
+            lcm = m.lc()
+
+            # shift everything except lc to right hand side
+            rhs = m.data[1:]
+
+            # lc * x ^ (degm - 1) = -bx ^ j - ... - c => x^(degm-1) -b/lc * x^j - ... - c/lc
+            for i in range(len(rhs)):
+                rhs[i] = 0 - rhs[i] // lcm
+
+            # get poly as list
+            data = self.data
+            # get everything to the right of x^(degm-1) term
+            output = Poly(self.data[-degm + 1:], self.m)
+            # get everything else to get x^(degm-1) (f*x^(deg-1) + ... + g)
+            rest = data[:-degm+1]
+            # for each term in the rest get product with rhs for substitution
+            for i in range(len(rest)):
+                step = rhs.copy()
+                # for each term in rhs
+                for j in range(len(step)):
+                    # get product
+                    step[j] *= rest[i]
+                # pad with zeroes to match degree of term
+                step += [0] * (len(rest)-i-1)
+                # add step to current answer
+                output += Poly(step, self.m)
+
+            # recurse if still not fully reduced
+            if (output.deg() >= m.deg()):
+                return output % m
+            # else return with reduced terms
+            return output % self.m
 
     # < for poly
     def __lt__(self, other):
@@ -252,12 +289,12 @@ class Poly:
 
     # power for poly
     # m is een integer hier, niet een polynomial, polynomial mod nog implementen
-    def pow(self, n: int, m=0):
+    def pow(self, n: int):
         x = self.copy()
-        z = Poly('1')
+        z = Poly('1', self.m)
         if n == 0:
-            return Poly('1')
-        if m == 0:
+            return Poly('1', self.m)
+        if self.m == 0:
             while n > 1:
                 if n % 2 == 1:
                     z *= x
@@ -266,13 +303,14 @@ class Poly:
                 n /= 2
             return z*x
         else:
+            print(x, x % self.m)
             while n > 1:
                 if n % 2 == 1:
-                    z = z * x % m
+                    z = (z * x) % self.m
                     n -= 1
-                x = x * x % m
+                x = (x * x) % self.m
                 n /= 2
-            return z * x % m
+            return (z * x) % self.m
 
     # def shift_first_element(self, d):
     #     deg = self.deg()
@@ -295,8 +333,11 @@ class Poly:
     #     return t == q
 
 
-print(Poly('6X^5+5X^3+5X^2+2X+2'))
-print(Poly('X^2+X').pow(15, 5))
-print(Poly('X^7') <= Poly('X^2'))
-print(Poly('X^2') != Poly('X^2'))
+# print(Poly('6X^5+5X^3+5X^2+2X+2', 3))
+# print(Poly('X^2+X', 5).pow(15))
+# print(Poly('X^7') <= Poly('X^2'))
+# print(Poly('X^2') != Poly('X^2'))
 # print(Poly([1,0,1]).euclid(Poly([1,0,0,1])))
+test = Poly('X^5+4X^3+X^2+X+1', 5)
+testm = Poly('X^3-X+2', test.m)
+print(test % testm)

@@ -37,8 +37,104 @@ for exercise in my_exercises['exercises']:
         print("{} :".format(exercise))
         print("Correct: {} - Own answer: [{}] - Correct answer: [{}]\n"
               .format(own_answer == params['answer'], own_answer, params['answer']))
-        params['answer'] = 'X+3'
-        params['answer-poly'] = [1, 3]
+        params['answer'] = own_answer
+
+    if operation == 'add-poly':
+        poly = Poly(params['f'])
+        poly2 = Poly(params['g'])
+        own_answer, own_answer_poly = str(poly + poly2), (poly + poly2).data
+
+        print("{} :".format(exercise))
+        print(
+            "Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: [{}]\n"
+                .format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
+                        params['answer'], own_answer_poly, params['answer-poly']))
+        params['answer'] = own_answer
+        params['answer-poly'] = own_answer_poly
+
+    if operation == 'subtract-poly':
+        poly = Poly(params['f'])
+        poly2 = Poly(params['g'])
+        own_answer, own_answer_poly = str(poly - poly2), (poly - poly2).data
+
+        print("{} :".format(exercise))
+        print(
+            "Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: [{}]\n"
+                .format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
+                        params['answer'], own_answer_poly, params['answer-poly']))
+        params['answer'] = own_answer
+        params['answer-poly'] = own_answer_poly
+
+    if operation == 'multiply-poly':
+        poly = Poly(params['f'])
+        poly2 = Poly(params['g'])
+        own_answer, own_answer_poly = str(poly * poly2), (poly * poly2).data
+
+        print("{} :".format(exercise))
+        print(
+            "Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: [{}]\n"
+                .format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
+                        params['answer'], own_answer_poly, params['answer-poly']))
+        params['answer'] = own_answer
+        params['answer-poly'] = own_answer_poly
+
+    # if operation == 'long-div-poly':
+    #     poly = Poly(params['f'])
+    #     poly2 = Poly(params['g'])
+    #     own_answer, own_answer_poly = "", [] # str(poly / poly2), (poly / poly2).data
+    #
+    #     print("{} :".format(exercise))
+    #     print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: [{}]\n"
+    #           .format(own_answer == params['answ_q'] and own_answer_poly == params['answer-poly'], own_answer, params['answer'], own_answer_poly, params['answer-poly']))
+    #     params['answ_q'] = own_answer
+    #     params['answer-poly'] = own_answer_poly
+    #
+    # if operation == 'euclid-poly':
+    #     poly = Poly(params['f'])
+    #     poly2 = Poly(params['g'])
+    #     own_answer, own_answer_poly = "", [] # str(poly.euclid(poly2)), poly.euclid(poly2).data
+    #
+    #     print("{} :".format(exercise))
+    #     print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: [{}]\n"
+    #           .format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer, params['answer'], own_answer_poly, params['answer-poly']))
+    #     params['answer'] = own_answer
+    #     params['answer-poly'] = own_answer_poly
+
+    if operation == 'euclid-poly-mod':
+        poly = Poly(params['f'])
+        poly2 = Poly(params['g'])
+        poly3 = Poly(params['h'])
+        # TODO change method name
+        own_answer, own_answer_poly = str(poly * poly2), (poly * poly2).data
+
+        print("{} :".format(exercise))
+        print(
+            "Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: [{}]\n"
+                .format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
+                        params['answer'], own_answer_poly, params['answer-poly']))
+        params['answer'] = own_answer
+        params['answer-poly'] = own_answer_poly
+
+    if operation == 'irreducible':
+        poly = Poly(params['f'])
+        own_answer = None  # poly.irreducible()
+
+        print("{} :".format(exercise))
+        print("Correct: {} - Own answer: [{}] - Correct answer: [{}]\n"
+              .format(own_answer == params['answer'], own_answer, params['answer']))
+        params['answer'] = own_answer
+
+    if operation == 'find-irred':
+        deg = params['deg']
+        own_answer, own_answer_poly = "", []  # str(Poly.find_irreducible(mod, deg)), Poly.find_irreducible(mod, deg).data
+
+        print("{} :".format(exercise))
+        print(
+            "Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: [{}]\n"
+                .format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
+                        params['answer'], own_answer_poly, params['answer-poly']))
+        params['answer'] = own_answer
+        params['answer-poly'] = own_answer_poly
 
     if operation == 'add-field':
         params['answer'] = 'X+3'

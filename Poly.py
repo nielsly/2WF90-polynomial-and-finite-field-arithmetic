@@ -148,18 +148,28 @@ class Poly:
     def copy(self):
         return Poly(self.data, self.m)
 
-    # / for poly
+    # modular long division for polynomials
+    # based on algorithm 2.2.6 of the reader with adjustments made for modular arithmetic
     def __truediv__(self, other):
-        q = [0] * (self.deg() + other.deg())
+        assert (other > Poly(0) and self.m > 0)
+
+        q = [0] * self.deg()
         r = self.copy()
-        deg_r, deg_b = r.deg(), other.deg()
+        deg_r, deg_b = r.deg() - 1, other.deg() - 1
+
         while r > Poly(0, self.m) and deg_r >= deg_b:
-            lc_div = r.lc() // other.lc()
+            # We need to eliminate the highest order coefficient
+            # We can safely loop through all possibilities, since we know that m < 100
+            for i in range(1, self.m + 1):
+                if (r.lc() - i * other.lc()) % self.m == 0:
+                    lc_div = i
+                    break
+
             q[deg_r - deg_b] += lc_div
             n = Poly(lc_div, self.m, deg_r - deg_b)
             nb = n * other
-            r = r - nb
-            deg_r = r.deg()
+            r = (r - nb) % self.m
+            deg_r = r.deg() - 1
         q.reverse()
         return Poly(q, self.m).trim(), r
 

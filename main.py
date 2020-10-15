@@ -92,8 +92,8 @@ for exercise in my_exercises['exercises']:
 
         print("{} :".format(exercise))
         print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer r: [{}] - Correct answer r: [{}]\n"
-              .format(answ_q == params['answ-q'] and answ_q_poly == params['answ-q-poly'] and answ_r == params[
-            'answ-r'] and answ_r_poly == params['answ-r-poly'], answ_q, params['answ-q'], answ_r,
+              .format(answ_q == params['answ-q'] and answ_q_poly == params['answ-q-poly'] and answ_r ==
+                      params['answ-r'] and answ_r_poly == params['answ-r-poly'], answ_q, params['answ-q'], answ_r,
                       params['answ-r']))
         params['answ-q'] = answ_q
         params['answ-q-poly'] = answ_q_poly
@@ -133,8 +133,7 @@ for exercise in my_exercises['exercises']:
         poly2 = Poly(params['g'], m=params['mod'])
         poly3 = Poly(params['h'], m=params['mod'])
 
-        # TODO call method
-        own_answer = None
+        own_answer = poly.poly_mod_eq(poly2, poly3)
 
         print("{} :".format(exercise))
         print(

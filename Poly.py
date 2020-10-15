@@ -339,6 +339,16 @@ class Poly:
 
     def poly_mod_eq(self, other, m):
         return self % m == other % m
+    
+    def irreducible(self, m):
+        root = 0
+        for x in range(0, m):
+            for i in range(len(self)):
+                root += int(self(i)) * x
+            if root == 0:
+                return False
+            root = 0
+        return True
 
     # def shift_first_element(self, d):
     #     deg = self.deg()

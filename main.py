@@ -143,7 +143,7 @@ for exercise in my_exercises['exercises']:
 
     if operation == 'irreducible':
         poly = Poly(params['f'], m=params['mod'])
-        own_answer = poly.irreducible(params['mod'])
+        own_answer = poly.irreducible()
 
         print("{} :".format(exercise))
         print("Correct: {} - Own answer: [{}] - Correct answer: [{}]\n"

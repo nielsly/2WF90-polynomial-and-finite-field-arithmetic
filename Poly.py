@@ -214,7 +214,7 @@ class Poly:
 
     # remove leading zeroes
     def trim(self):
-        self.data = self.data[len(self.data)-len(self):]
+        self.data = self.data[len(self.data) - len(self):]
         if len(self.data) == 0:
             self.data = [0]
         return self
@@ -339,17 +339,16 @@ class Poly:
 
     def poly_mod_eq(self, other, m):
         return self % m == other % m
-    
-    def irreducible(self, m):
-        root = 0
-        for x in range(0, m):
-            for i in range(len(self.data)):
-                root += int(self.data(i)) * x
-            if root == 0:
-                return False
-            root = 0
-        return True
 
+    # Check if polynomial is irreducible.
+    # Based on algorithm 5.1.4, but with a for-loop to prevent infinite loops
+    def irreducible(self):
+        f = self
+        m = f.m
+        for t in range(1, f.deg()):
+            if f.gcd(Poly('X^{}-X'.format(m * t), m)) != Poly([1], m):
+                return False
+        return True
 
     # def shift_first_element(self, d):
     #     deg = self.deg()
@@ -383,7 +382,6 @@ def modular_inverse(n: int, mod, return_poly=False):
             else:
                 return i
     raise AssertionError
-
 
 # print(Poly('6X^5+5X^3+5X^2+2X+2', 3))
 # print(Poly('X^2+X', 5).pow(15))

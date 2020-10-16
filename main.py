@@ -2,6 +2,7 @@ import json
 
 import asn1tools as asn
 
+from Field import Field
 from Poly import Poly
 
 ### STUDENT PERSPECTIVE (example) ###
@@ -163,8 +164,32 @@ for exercise in my_exercises['exercises']:
         params['answer-poly'] = own_answer_poly
 
     if operation == 'add-field':
-        params['answer'] = 'X+3'
-        params['answer-poly'] = [1, 3]
+        field = Field(params['mod'], params['mod-poly'])
+        poly = Poly(params['a'], m=params['mod'])
+        poly2 = Poly(params['b'], m=params['mod'])
+        own_answer, own_answer_poly = str(field.add(poly, poly2)), (field.add(poly, poly2)).data
+
+        print("{} :".format(exercise))
+        print(
+            "Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: [{}]\n"
+                .format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
+                        params['answer'], own_answer_poly, params['answer-poly']))
+        params['answer'] = own_answer
+        params['answer-poly'] = own_answer_poly
+
+    if operation == 'subtract-field':
+        field = Field(params['mod'], params['mod-poly'])
+        poly = Poly(params['a'], m=params['mod'])
+        poly2 = Poly(params['b'], m=params['mod'])
+        own_answer, own_answer_poly = str(field.subtract(poly, poly2)), (field.subtract(poly, poly2)).data
+
+        print("{} :".format(exercise))
+        print(
+            "Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: [{}]\n"
+                .format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
+                        params['answer'], own_answer_poly, params['answer-poly']))
+        params['answer'] = own_answer
+        params['answer-poly'] = own_answer_poly
 
     if operation == 'add-table':
         params['answer'] = ['X+1', '2X+1']

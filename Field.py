@@ -15,3 +15,6 @@ class Field:
 
     def subtract(self, f: Poly, g: Poly):
         return (f - g) % self.poly
+
+    def equals(self, f: Poly, g: Poly):
+        return (f % self.poly) == (g % self.poly)

@@ -191,6 +191,19 @@ for exercise in my_exercises['exercises']:
         params['answer'] = own_answer
         params['answer-poly'] = own_answer_poly
 
+    if operation == 'equals-field':
+        field = Field(params['mod'], params['mod-poly'])
+        poly = Poly(params['a'], m=params['mod'])
+        poly2 = Poly(params['b'], m=params['mod'])
+        own_answer = field.equals(poly, poly2)
+
+        print("{} :".format(exercise))
+        print(
+            "Correct: {} - Own answer: [{}] - Correct answer: [{}]\n"
+                .format(own_answer == params['answer'], own_answer,
+                        params['answer']))
+        params['answer'] = own_answer
+
     if operation == 'add-table':
         params['answer'] = ['X+1', '2X+1']
         params['answer-poly'] = [[1, 1], [2, 1]]

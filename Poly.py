@@ -255,6 +255,10 @@ class Poly:
             output = Poly(self.data[-degm + 1:], self.m)
             # get everything else to get x^(degm) (f*x^(deg-1) + ... + g)
             rest = data[:-degm + 1]
+
+            # Create a step poly before the loop and adjust its data instead of creating a new
+            # one each iteration (saves ~0.4 seconds):
+            stepPoly = Poly([0], self.m)
             # for each term in the rest get product with rhs for substitution
             for i in range(len(rest)):
                 step = rhs.copy()
@@ -264,8 +268,9 @@ class Poly:
                     step[j] *= rest[i]
                 # pad with zeroes to match degree of term
                 step += [0] * (len(rest) - i - 1)
+                stepPoly.data = step
                 # add step to current answer
-                output += Poly(step, self.m)
+                output += stepPoly
 
             # recurse if still not fully reduced
             if output.deg() >= m.deg():

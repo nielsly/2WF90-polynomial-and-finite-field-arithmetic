@@ -153,7 +153,8 @@ for exercise in my_exercises['exercises']:
 
     if operation == 'find-irred':
         deg = params['deg']
-        own_answer, own_answer_poly = "", []  # str(Poly.find_irreducible(mod, deg)), Poly.find_irreducible(mod, deg).data
+        mod = params['mod']
+        own_answer, own_answer_poly = str(poly.findIrred(mod, deg)), Poly.findIrred(mod, deg).data
 
         print("{} :".format(exercise))
         print(

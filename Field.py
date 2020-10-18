@@ -20,7 +20,7 @@ class Field:
         return (f - g) % self.poly
     
     def multiply(self, f: Poly, g:Poly):
-        return f * g % self.poly
+        return (f * g) % self.poly
 
     def equals(self, f: Poly, g: Poly):
         return (f % self.poly) == (g % self.poly)

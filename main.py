@@ -3,7 +3,7 @@ import json
 import asn1tools as asn
 
 from Field import Field
-from Poly import Poly
+from Poly import Poly, findIrred
 
 ### STUDENT PERSPECTIVE (example) ###
 
@@ -154,7 +154,8 @@ for exercise in my_exercises['exercises']:
     if operation == 'find-irred':
         deg = params['deg']
         mod = params['mod']
-        own_answer, own_answer_poly = str(poly.findIrred(mod, deg)), Poly.findIrred(mod, deg).data
+        poly = findIrred(mod, deg)
+        own_answer, own_answer_poly = str(poly.data), poly.data
 
         print("{} :".format(exercise))
         print(

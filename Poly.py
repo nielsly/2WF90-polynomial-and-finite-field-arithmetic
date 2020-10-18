@@ -127,7 +127,7 @@ class Poly:
                 if ap[i] != 0 and bp[j] != 0:
                     p[i + j] += ap[i] * bp[j]
         p.reverse()
-        return (Poly(p, self.m) % self.m).trim()
+        return Poly(p, self.m)
 
     # + for poly
     def __add__(self, other):
@@ -138,7 +138,7 @@ class Poly:
         for i in range(other.deg() + 1):
             ap[i] += bp[i]
         ap.reverse()
-        return (Poly(ap, self.m) % self.m).trim()
+        return Poly(ap, self.m)
 
     # - for poly
     def __sub__(self, other):
@@ -149,7 +149,7 @@ class Poly:
         for i in range(other.deg() + 1):
             ap[i] -= bp[i]
         ap.reverse()
-        return (Poly(ap, self.m) % self.m).trim()
+        return Poly(ap, self.m)
 
     # make copy of poly
     def copy(self):
@@ -179,7 +179,7 @@ class Poly:
             r = (r - nb) % self.m
             deg_r = r.deg()
         q.reverse()
-        return (Poly(q, self.m)).trim(), r.trim()
+        return Poly(q, self.m), r.trim()
 
     # gcd of two polynomials, uses euclid's extended algorithm under the hood
     def gcd(self, other):

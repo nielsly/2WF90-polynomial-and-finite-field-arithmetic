@@ -1,3 +1,5 @@
+import random
+
 class Poly:
     # initialise the Poly, inputs can be int, list or string,degree is used if a single integer/empty string is entered
     def __init__(self, a: int or list or str, m: int = 0, degree=0):

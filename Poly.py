@@ -349,6 +349,17 @@ class Poly:
             if f.gcd(Poly('X^{}-X'.format(m * t), m)) != Poly([1], m):
                 return False
         return True
+    
+    #Find irreducible polynomial of degree n in Z/modZ
+    def findIrred(mod: int, deg:int):
+        f: []
+        f.append(random.randint(1, mod-1))
+        for d in range(deg-1):
+            f.append(random.randint(0, mod-1))
+        if irreducible(f):
+            return f
+        else:
+            findIrred(mod, deg)
 
     # def shift_first_element(self, d):
     #     deg = self.deg()

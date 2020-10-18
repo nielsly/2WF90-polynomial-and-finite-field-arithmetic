@@ -192,6 +192,23 @@ for exercise in my_exercises['exercises']:
         params['answer'] = own_answer
         params['answer-poly'] = own_answer_poly
 
+    if operation == 'division-field':
+        field = Field(params['mod'], params['mod-poly'])
+        poly = Poly(params['a'], m=params['mod'])
+        poly2 = Poly(params['b'], m=params['mod'])
+        try:
+            own_answer, own_answer_poly = str(field.divide(poly, poly2)), (field.divide(poly, poly2)).data
+        except AssertionError:
+            own_answer, own_answer_poly = "ERROR", []
+
+        print("{} :".format(exercise))
+        print(
+            "Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: [{}]\n"
+                .format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
+                        params['answer'], own_answer_poly, params['answer-poly']))
+        params['answer'] = own_answer
+        params['answer-poly'] = own_answer_poly
+
     if operation == 'equals-field':
         field = Field(params['mod'], params['mod-poly'])
         poly = Poly(params['a'], m=params['mod'])

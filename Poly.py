@@ -356,17 +356,6 @@ class Poly:
             if f.gcd(Poly('X^{}-X'.format(m * t), m)) != Poly([1], m):
                 return False
         return True
-    
-    #Find irreducible polynomial of degree n in Z/modZ
-    def findIrred(mod: int, deg:int):
-        f: []
-        f.append(random.randint(1, mod-1))
-        for d in range(deg-1):
-            f.append(random.randint(0, mod-1))
-        if irreducible(f):
-            return f
-        else:
-            findIrred(mod, deg)
 
     # def shift_first_element(self, d):
     #     deg = self.deg()
@@ -400,6 +389,18 @@ def modular_inverse(n: int, mod, return_poly=False):
             else:
                 return i
     raise AssertionError
+    
+#Find irreducible polynomial of degree n in Z/modZ
+def findIrred(mod: int, deg:int):
+    f = [0] * deg
+    for n in range(1, mod - 1):
+        f[0] = n
+        for d in range(1, deg - 1):
+            for m in range(0, mod - 1):
+                f[d] = m
+                poly = Poly(f, m)
+                if poly.irreducible():
+                    return poly
 
 # print(Poly('6X^5+5X^3+5X^2+2X+2', 3))
 # print(Poly('X^2+X', 5).pow(15))

@@ -168,6 +168,28 @@ for exercise in my_exercises['exercises']:
 
         params['answer'], params['answer-poly'] = own_answer, own_answer_poly
 
+    if operation == 'add-table':
+        field = Field(params['mod'], params['mod-poly'])
+        own_answer, own_answer_poly = poly_table_pretty(field.add_table()), poly_table(field.add_table())
+
+        print("{} :".format(exercise))
+        print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: "
+              "[{}]\n".format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
+                              params['answer'], own_answer_poly, params['answer-poly']))
+
+        params['answer'], params['answer-poly'] = own_answer, own_answer_poly
+
+    if operation == 'mult-table':
+        field = Field(params['mod'], params['mod-poly'])
+        own_answer, own_answer_poly = poly_table_pretty(field.mult_table()), poly_table(field.mult_table())
+
+        print("{} :".format(exercise))
+        print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: "
+              "[{}]\n".format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
+                              params['answer'], own_answer_poly, params['answer-poly']))
+
+        params['answer'], params['answer-poly'] = own_answer, own_answer_poly
+
     if operation == 'display-field':
         field = Field(params['mod'], params['mod-poly'])
         poly = Poly(params['a'], params['mod'])

@@ -31,6 +31,28 @@ class Field:
 
         return elements
 
+    def add_table(self):
+        elements = self.elements()
+        table = []
+        for row in range(0, len(elements)):
+            row_arr = []
+            for column in range(0, len(elements)):
+                row_arr.append(self.reduce(elements[row] + elements[column]))
+            table.append(row_arr)
+
+        return table
+
+    def mult_table(self):
+        elements = self.elements()
+        table = []
+        for row in range(0, len(elements)):
+            row_arr = []
+            for column in range(0, len(elements)):
+                row_arr.append(self.reduce(elements[row] * elements[column]))
+            table.append(row_arr)
+
+        return table
+
     def display(self, a: Poly):
         if a.deg() < self.poly.deg():
             return a
@@ -116,3 +138,17 @@ def get_prime_factors(n):
     if n > 1:
         factors.append(n)
     return factors
+
+
+def poly_table_pretty(polys: list):
+    for i in range(0, len(polys)):
+        for j in range(0, len(polys)):
+            polys[i][j] = str(polys[i][j])
+    return polys
+
+
+def poly_table(polys: list):
+    for i in range(0, len(polys)):
+        for j in range(0, len(polys)):
+            polys[i][j] = polys[i][j].data
+    return polys

@@ -1,16 +1,17 @@
-from Poly import Poly
+from Poly import Poly, find_irred
+
 
 class Field:
 
-    def __init__(self, mod: int, poly: list or Poly):
-        self.mod = mod
+    def __init__(self, m: int, poly: list or Poly):
+        self.m = m
         if type(poly) == list:
-            self.poly = Poly(poly, mod)
+            self.poly = Poly(poly, self.m)
         else:
             self.poly = poly
 
     def order(self):
-        return self.mod ** self.poly.deg()
+        return self.m ** self.poly.deg()
 
     def reduce(self, f: Poly):
         return f % self.poly
@@ -25,10 +26,10 @@ class Field:
         for i in range(0, self.order()):
             i_copy = i
             for j in range(0, self.poly.deg()):
-                v = i_copy // (self.mod ** (self.poly.deg() - j - 1))
-                i_copy -= v * (self.mod ** (self.poly.deg() - j - 1))
+                v = i_copy // (self.m ** (self.poly.deg() - j - 1))
+                i_copy -= v * (self.m ** (self.poly.deg() - j - 1))
                 poly_data[j] = v
-            elements.append(Poly(poly_data, self.mod))
+            elements.append(Poly(poly_data, self.m))
 
         return elements
 
@@ -76,7 +77,7 @@ class Field:
     def divide(self, f: Poly, g: Poly):
         assert g != Poly([0])  # Make sure we don't divide by zero
 
-        # First mod out the polynomials modulus to make sure we are working with the polynomials in their smallest form
+        # First m out the polynomials modulus to make sure we are working with the polynomials in their smallest form
         poly1 = self.reduce(f)
         poly2 = self.reduce(g)
         if (poly1 / poly2)[1] != Poly([0]):  # Check whether rest is zero
@@ -102,26 +103,28 @@ class Field:
 
     # Check if an element is primitive in a field
     # Based on algorithm 4.4.3
-    def is_primitive(self, f: Poly):
-        prime_factors = get_prime_factors(self.order() - 1)
+    def is_primitive(self, a: Poly):
+        q = self.order()
+        p = get_prime_divisors(q - 1)
+        k = len(p)
         i = 0
-        while i < len(prime_factors) and self.reduce(f.pow((self.order() - 1) / prime_factors[i])) != Poly([1]):
+        while i < k and self.reduce(a.pow((q - 1) // p[i])) != Poly(i, self.m):
             i += 1
 
-        return False if i < len(prime_factors) else True
+        return False if i < k else True
 
     # Find a primitive element in the field
     # Based on algorithm 4.4.4
-    def findPrim(self):
-        random = [0]
+    def find_prim(self):
         irreducibles = []
+        primitives = []
         for d in range(0, self.poly.deg()):
-            irreducibles.append(find_irred(self.mod, d))
-        for i in range(0, len(irreducibles)):
-            if self.is_primitive(Poly(irreducibles[i], self.mod)):
-                break
-                return irreducibles[i]
-        return False
+            irreducibles += find_irred(self.m, d)
+        for n in irreducibles:
+            if self.is_primitive(n):
+                primitives.append(n)
+        return primitives
+
 
 # Brute force prime factor algorithm based on https://stackoverflow.com/a/22808285/5627123
 # Only to be used on relative small numbers
@@ -138,6 +141,15 @@ def get_prime_factors(n):
     if n > 1:
         factors.append(n)
     return factors
+
+
+def get_prime_divisors(n):
+    p = get_prime_factors(n)
+    divisors = []
+    for i in p:
+        if i not in divisors:
+            divisors.append(i)
+    return divisors
 
 
 # Format the table in the same way as the answer

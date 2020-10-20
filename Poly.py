@@ -201,7 +201,7 @@ class Poly:
             u = xp - q * u
             v = yp - q * v
 
-        a_inv = modular_inverse(a.lc(), mod=self.m, return_poly=True)
+        a_inv = modular_inverse(a.lc(), self.m, True)
         a = x * a_inv
         b = y * a_inv
         return a, b, a * self + b * other
@@ -234,7 +234,7 @@ class Poly:
         elif type(m) == Poly:
             degm = m.deg() + 1
             if degm == 0:
-                # apparently Poly a mod (Poly b = 0) = Poly a
+                # apparently Poly a m (Poly b = 0) = Poly a
                 return self
             # if len(self.data) < degm:
             #     return Poly(self.data, self.m) % self.m
@@ -322,7 +322,7 @@ class Poly:
         return s.lc() == 0
 
     # power for poly
-    # m is een integer hier, niet een polynomial, polynomial mod nog implementen
+    # m is een integer hier, niet een polynomial, polynomial m nog implementen
     def pow(self, n: int):
         x = self.copy()
         z = Poly('1', self.m)
@@ -345,12 +345,12 @@ class Poly:
                 n /= 2
             return (z * x) % self.m
 
-    def poly_mod_eq(self, other, m):
+    def poly_mod_eq(self, other, m) -> bool:
         return self % m == other % m
 
     # Check if polynomial is irreducible.
     # Based on algorithm 5.1.4, but with a for-loop to prevent infinite loops
-    def irreducible(self):
+    def irreducible(self) -> bool:
         f = self
         m = f.m
         for t in range(1, f.deg()):
@@ -379,20 +379,20 @@ class Poly:
 
 
 # modular inverse of an integer
-def modular_inverse(n: int, mod, return_poly=False):
-    assert (n != 0 and mod > 0)
+def modular_inverse(n: int, m, return_poly=False) -> Poly or int:
+    assert (n != 0 and m > 0)
 
-    for i in range(1, mod + 1):
-        if (i * n) % mod == 1:
+    for i in range(1, m + 1):
+        if (i * n) % m == 1:
             if return_poly:
-                return Poly([i], m=mod)
+                return Poly(i, m)
             else:
                 return i
     raise AssertionError
 
 
 #Find irreducible polynomial of degree n in Z/modZ
-def find_irred(m: int, deg:int):
+def find_irred(m: int, deg:int) -> list:
     if deg < 0:
         raise ValueError('Degree must 0 or higher')
 

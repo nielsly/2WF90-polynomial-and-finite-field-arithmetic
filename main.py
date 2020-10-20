@@ -301,9 +301,14 @@ for exercise in my_exercises['exercises']:
     if operation == 'find-prim':
         field = Field(params['mod'], params['mod-poly'])
         try:
-            own_answer, own_answer_poly = str(field.findPrim()), (field.findPrim()).data
+            primitives = field.find_prim()
         except AssertionError:
             own_answer, own_answer_poly = 'ERROR', []
+
+        for n in primitives:
+            if n.data == params['answer-poly']:
+                own_answer, own_answer_poly = str(n), n.data
+                break
 
         print("{} :".format(exercise))
         print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: "

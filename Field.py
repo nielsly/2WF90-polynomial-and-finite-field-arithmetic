@@ -15,6 +15,22 @@ class Field:
     def reduce(self, f: Poly):
         return f % self.poly
 
+    def elements(self):
+        elements = []
+        poly_data = [0] * (self.poly.deg())
+
+        # We will treat this problem as if we are trying to print a decimal number in radix X
+        # We simply loop over all possible decimal numbers and then transform them into polynomials
+        for i in range(0, self.order()):
+            i_copy = i
+            for j in range(0, self.poly.deg()):
+                v = i_copy // (self.mod ** (self.poly.deg() - j - 1))
+                i_copy -= v * (self.mod ** (self.poly.deg() - j - 1))
+                poly_data[j] = v
+            elements.append(Poly(poly_data, self.mod))
+
+        return elements
+
     def display(self, a: Poly):
         if a.deg() < self.poly.deg():
             return a

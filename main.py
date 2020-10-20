@@ -276,6 +276,20 @@ for exercise in my_exercises['exercises']:
 
         params['answer'] = own_answer
 
+    if operation == 'find-prim':
+        field = Field(params['mod'], params['mod-poly'])
+        try:
+            own_answer, own_answer_poly = str(field.findPrim()), (field.findPrim()).data
+        except AssertionError:
+            own_answer, own_answer_poly = 'ERROR', []
+
+        print("{} :".format(exercise))
+        print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: "
+              "[{}]\n".format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
+                              params['answer'], own_answer_poly, params['answer-poly']))
+
+        params['answer'], params['answer-poly'] = own_answer, own_answer_poly
+
     # Save answer
     my_answers['exercises'].append({operation: params})
 

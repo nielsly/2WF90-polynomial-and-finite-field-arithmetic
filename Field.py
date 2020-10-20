@@ -114,15 +114,14 @@ class Field:
     # Based on algorithm 4.4.4
     def findPrim(self):
         random = [0]
-        while Poly(random, self.mod) != self.poly:
-            for n in range(0, self.mod - 1):
-                random[0] = n
-                for d in range(0, len(self.poly)):
-                    for m in range(0, self.mod - 1):
-                        random[d] = m
-                        ran_poly = self.reduce(Poly(random, self.mod))
-                        if self.is_primitive(ran_poly):
-                            return ran_poly
+        irreducibles = []
+        for d in range(0, self.poly.deg()):
+            irreducibles.append(find_irred(self.mod, d))
+        for i in range(0, len(irreducibles)):
+            if self.is_primitive(Poly(irreducibles[i], self.mod)):
+                break
+                return irreducibles[i]
+        return False
 
 # Brute force prime factor algorithm based on https://stackoverflow.com/a/22808285/5627123
 # Only to be used on relative small numbers

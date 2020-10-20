@@ -38,6 +38,7 @@ for exercise in my_exercises['exercises']:
         print("{} :".format(exercise))
         print("Correct: {} - Own answer: [{}] - Correct answer: [{}]\n"
               .format(own_answer == params['answer'], own_answer, params['answer']))
+
         params['answer'] = own_answer
 
     if operation == 'add-poly':
@@ -46,12 +47,11 @@ for exercise in my_exercises['exercises']:
         own_answer, own_answer_poly = str(poly + poly2), (poly + poly2).data
 
         print("{} :".format(exercise))
-        print(
-            "Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: [{}]\n"
-                .format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
-                        params['answer'], own_answer_poly, params['answer-poly']))
-        params['answer'] = own_answer
-        params['answer-poly'] = own_answer_poly
+        print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: "
+              "[{}]\n".format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
+                              params['answer'], own_answer_poly, params['answer-poly']))
+
+        params['answer'], params['answer-poly'] = own_answer, own_answer_poly
 
     if operation == 'subtract-poly':
         poly = Poly(params['f'], params['mod'])
@@ -59,12 +59,11 @@ for exercise in my_exercises['exercises']:
         own_answer, own_answer_poly = str(poly - poly2), (poly - poly2).data
 
         print("{} :".format(exercise))
-        print(
-            "Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: [{}]\n"
-                .format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
-                        params['answer'], own_answer_poly, params['answer-poly']))
-        params['answer'] = own_answer
-        params['answer-poly'] = own_answer_poly
+        print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: "
+              "[{}]\n".format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
+                              params['answer'], own_answer_poly, params['answer-poly']))
+
+        params['answer'], params['answer-poly'] = own_answer, own_answer_poly
 
     if operation == 'multiply-poly':
         poly = Poly(params['f'], params['mod'])
@@ -72,12 +71,11 @@ for exercise in my_exercises['exercises']:
         own_answer, own_answer_poly = str(poly * poly2), (poly * poly2).data
 
         print("{} :".format(exercise))
-        print(
-            "Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: [{}]\n"
-                .format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
-                        params['answer'], own_answer_poly, params['answer-poly']))
-        params['answer'] = own_answer
-        params['answer-poly'] = own_answer_poly
+        print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: "
+              "[{}]\n".format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
+                              params['answer'], own_answer_poly, params['answer-poly']))
+
+        params['answer'], params['answer-poly'] = own_answer, own_answer_poly
 
     if operation == 'long-div-poly':
         poly = Poly(params['f'], params['mod'])
@@ -96,10 +94,9 @@ for exercise in my_exercises['exercises']:
               .format(answ_q == params['answ-q'] and answ_q_poly == params['answ-q-poly'] and answ_r ==
                       params['answ-r'] and answ_r_poly == params['answ-r-poly'], answ_q, params['answ-q'], answ_r,
                       params['answ-r']))
-        params['answ-q'] = answ_q
-        params['answ-q-poly'] = answ_q_poly
-        params['answ-r'] = answ_r
-        params['answ-r-poly'] = answ_r_poly
+
+        params['answ-q'], params['answ-q-poly'] = answ_q, answ_q_poly
+        params['answ-r'], params['answ-r-poly'] = answ_r, answ_r_poly
 
     if operation == 'euclid-poly':
         poly = Poly(params['f'], params['mod'])
@@ -116,18 +113,16 @@ for exercise in my_exercises['exercises']:
             answ_d, answ_d_poly = "ERROR", []
 
         print("{} :".format(exercise))
-        print(
-            "Correct: {} - Own answer a: [{}] - Correct answer a: [{}] || Own answer b: [{}] - Correct answer b: [{}] || Own answer d: [{}] - Correct answer d: [{}]\n"
-            .format(answ_a == params['answ-a'] and answ_a_poly == params['answ-a-poly'] and answ_b == params['answ-b']
-                    and answ_b_poly == params['answ-b-poly'] and answ_d == params['answ-d'] and
-                    answ_d_poly == params['answ-d-poly'], answ_a, params['answ-a'], answ_b, params['answ-b'], answ_d,
-                    params['answ-d']))
-        params['answ-a'] = answ_a
-        params['answ-a-poly'] = answ_a_poly
-        params['answ-b'] = answ_b
-        params['answ-b-poly'] = answ_b_poly
-        params['answ-d'] = answ_d
-        params['answ-d-poly'] = answ_d_poly
+        print("Correct: {} - Own answer a: [{}] - Correct answer a: [{}] || Own answer b: [{}] - Correct answer b: "
+              "[{}] || Own answer d: [{}] - Correct answer d: [{}]\n"
+              .format(answ_a == params['answ-a'] and answ_a_poly == params['answ-a-poly'] and answ_b == params['answ-b']
+                      and answ_b_poly == params['answ-b-poly'] and answ_d == params['answ-d'] and
+                      answ_d_poly == params['answ-d-poly'], answ_a, params['answ-a'], answ_b, params['answ-b'], answ_d,
+                      params['answ-d']))
+
+        params['answ-a'], params['answ-a-poly'] = answ_a, answ_a_poly
+        params['answ-b'], params['answ-b-poly'] = answ_b, answ_b_poly
+        params['answ-d'], params['answ-d-poly']= answ_d, answ_d_poly
 
     if operation == 'equals-poly-mod':
         poly = Poly(params['f'], params['mod'])
@@ -137,9 +132,9 @@ for exercise in my_exercises['exercises']:
         own_answer = poly.poly_mod_eq(poly2, poly3)
 
         print("{} :".format(exercise))
-        print(
-            "Correct: {} - Own answer: [{}] - Correct answer: [{}]\n".format(own_answer == params['answer'],
-                                                                             own_answer, params['answer']))
+        print("Correct: {} - Own answer: [{}] - Correct answer: [{}]\n".format(own_answer == params['answer'],
+                                                                               own_answer, params['answer']))
+
         params['answer'] = own_answer
 
     if operation == 'irreducible':
@@ -149,27 +144,29 @@ for exercise in my_exercises['exercises']:
         print("{} :".format(exercise))
         print("Correct: {} - Own answer: [{}] - Correct answer: [{}]\n"
               .format(own_answer == params['answer'], own_answer, params['answer']))
+
         params['answer'] = own_answer
 
     if operation == 'find-irred':
         deg = params['deg']
         mod = params['mod']
 
-        own_answer, own_answer_poly = 0, [0]
-
         polys = find_irred(mod, deg)
-        for x in polys:
-            if params['answer-poly'] == x.data:
-                own_answer, own_answer_poly = str(x), x.data
-                break
+        if len(polys) > 0:
+            own_answer, own_answer_poly = polys[0], polys[0].data
+            for x in polys:
+                if params['answer-poly'] == x.data:
+                    own_answer, own_answer_poly = str(x), x.data
+                    break
+        else:
+            own_answer, own_answer_poly = 'ERROR', 'ERROR'
 
         print("{} :".format(exercise))
-        print(
-            "Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: [{}]\n"
-                .format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
-                        params['answer'], own_answer_poly, params['answer-poly']))
-        params['answer'] = own_answer
-        params['answer-poly'] = own_answer_poly
+        print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: "
+              "[{}]\n".format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
+                              params['answer'], own_answer_poly, params['answer-poly']))
+
+        params['answer'], params['answer-poly'] = own_answer, own_answer_poly
 
     if operation == 'add-field':
         field = Field(params['mod'], params['mod-poly'])
@@ -178,12 +175,11 @@ for exercise in my_exercises['exercises']:
         own_answer, own_answer_poly = str(field.add(poly, poly2)), (field.add(poly, poly2)).data
 
         print("{} :".format(exercise))
-        print(
-            "Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: [{}]\n"
-                .format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
-                        params['answer'], own_answer_poly, params['answer-poly']))
-        params['answer'] = own_answer
-        params['answer-poly'] = own_answer_poly
+        print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: "
+              "[{}]\n".format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
+                              params['answer'], own_answer_poly, params['answer-poly']))
+
+        params['answer'], params['answer-poly'] = own_answer, own_answer_poly
 
     if operation == 'subtract-field':
         field = Field(params['mod'], params['mod-poly'])
@@ -192,12 +188,11 @@ for exercise in my_exercises['exercises']:
         own_answer, own_answer_poly = str(field.subtract(poly, poly2)), (field.subtract(poly, poly2)).data
 
         print("{} :".format(exercise))
-        print(
-            "Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: [{}]\n"
-                .format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
-                        params['answer'], own_answer_poly, params['answer-poly']))
-        params['answer'] = own_answer
-        params['answer-poly'] = own_answer_poly
+        print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: "
+              "[{}]\n".format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
+                              params['answer'], own_answer_poly, params['answer-poly']))
+
+        params['answer'], params['answer-poly'] = own_answer, own_answer_poly
         
     if operation == 'multiply-field':
         field = Field(params['mod'], params['mod-poly'])
@@ -207,12 +202,11 @@ for exercise in my_exercises['exercises']:
 
         print("{} :".format(exercise))
         print(
-            "Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: [{}]\n"
-                .format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
-                        params['answer'], own_answer_poly, params['answer-poly']))
-        params['answer'] = own_answer
-        params['answer-poly'] = own_answer_poly
+            "Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: "
+            "[{}]\n".format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
+                            params['answer'], own_answer_poly, params['answer-poly']))
 
+        params['answer'], params['answer-poly'] = own_answer, own_answer_poly
 
     if operation == 'inverse-field':
         field = Field(params['mod'], params['mod-poly'])
@@ -223,12 +217,11 @@ for exercise in my_exercises['exercises']:
             own_answer, own_answer_poly = "ERROR", []
 
         print("{} :".format(exercise))
-        print(
-            "Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: [{}]\n"
-                .format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
-                        params['answer'], own_answer_poly, params['answer-poly']))
-        params['answer'] = own_answer
-        params['answer-poly'] = own_answer_poly
+        print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: "
+              "[{}]\n".format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
+                              params['answer'], own_answer_poly, params['answer-poly']))
+
+        params['answer'], params['answer-poly'] = own_answer, own_answer_poly
 
     if operation == 'division-field':
         field = Field(params['mod'], params['mod-poly'])
@@ -240,12 +233,11 @@ for exercise in my_exercises['exercises']:
             own_answer, own_answer_poly = "ERROR", []
 
         print("{} :".format(exercise))
-        print(
-            "Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: [{}]\n"
-                .format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
-                        params['answer'], own_answer_poly, params['answer-poly']))
-        params['answer'] = own_answer
-        params['answer-poly'] = own_answer_poly
+        print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: "
+              "[{}]\n".format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
+                              params['answer'], own_answer_poly, params['answer-poly']))
+
+        params['answer'], params['answer-poly'] = own_answer, own_answer_poly
 
     if operation == 'equals-field':
         field = Field(params['mod'], params['mod-poly'])
@@ -254,10 +246,9 @@ for exercise in my_exercises['exercises']:
         own_answer = field.equals(poly, poly2)
 
         print("{} :".format(exercise))
-        print(
-            "Correct: {} - Own answer: [{}] - Correct answer: [{}]\n"
-                .format(own_answer == params['answer'], own_answer,
-                        params['answer']))
+        print("Correct: {} - Own answer: [{}] - Correct answer: [{}]\n".format(own_answer == params['answer'],
+                                                                               own_answer, params['answer']))
+
         params['answer'] = own_answer
 
     if operation == 'primitive':
@@ -270,6 +261,7 @@ for exercise in my_exercises['exercises']:
             "Correct: {} - Own answer: [{}] - Correct answer: [{}]\n"
                 .format(own_answer == params['answer'], own_answer,
                         params['answer']))
+
         params['answer'] = own_answer
 
     # Save answer

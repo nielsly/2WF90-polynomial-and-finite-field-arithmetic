@@ -15,13 +15,19 @@ class Field:
     def reduce(self, f: Poly):
         return f % self.poly
 
+    def display(self, a: Poly):
+        if a.deg() < self.poly.deg():
+            return a
+        else:
+            return self.reduce(a)
+
     def add(self, f: Poly, g: Poly):
         return (f + g) % self.poly
 
     def subtract(self, f: Poly, g: Poly):
         return (f - g) % self.poly
-    
-    def multiply(self, f: Poly, g:Poly):
+
+    def multiply(self, f: Poly, g: Poly):
         return (f * g) % self.poly
 
     def equals(self, f: Poly, g: Poly):

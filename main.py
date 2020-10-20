@@ -168,6 +168,18 @@ for exercise in my_exercises['exercises']:
 
         params['answer'], params['answer-poly'] = own_answer, own_answer_poly
 
+    if operation == 'display-field':
+        field = Field(params['mod'], params['mod-poly'])
+        poly = Poly(params['a'], params['mod'])
+        own_answer, own_answer_poly = str(field.display(poly)), field.display(poly).data
+
+        print("{} :".format(exercise))
+        print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: "
+              "[{}]\n".format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
+                              params['answer'], own_answer_poly, params['answer-poly']))
+
+        params['answer'], params['answer-poly'] = own_answer, own_answer_poly
+
     if operation == 'add-field':
         field = Field(params['mod'], params['mod-poly'])
         poly = Poly(params['a'], params['mod'])

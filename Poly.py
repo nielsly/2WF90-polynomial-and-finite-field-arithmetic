@@ -236,47 +236,48 @@ class Poly:
             if degm == 0:
                 # apparently Poly a mod (Poly b = 0) = Poly a
                 return self
-            if len(self.data) < degm:
-                return Poly(self.data, self.m) % self.m
-            m.trim()
-            # lc*x^(degm) + (bx^j + ... + c) = 0 => lc*x^(degm) = -bx^j - ... - c
-            lcm = m.lc()
-
-            # shift everything except lc to right hand side
-            rhs = m.data[1:]
-
-            # lc * x ^ (degm) = -bx ^ j - ... - c => x^(degm) -b/lc * x^j - ... - c/lc
-            for i in range(len(rhs)):
-                rhs[i] = 0 - rhs[i] // lcm
-
-            # get poly as list
-            data = self.data
-            # get everything to the right of x^(degm) term
-            output = Poly(self.data[-degm + 1:], self.m)
-            # get everything else to get x^(degm) (f*x^(deg-1) + ... + g)
-            rest = data[:-degm + 1]
-
-            # Create a step poly before the loop and adjust its data instead of creating a new
-            # one each iteration (saves ~0.4 seconds):
-            stepPoly = Poly([0], self.m)
-            # for each term in the rest get product with rhs for substitution
-            for i in range(len(rest)):
-                step = rhs.copy()
-                # for each term in rhs
-                for j in range(len(step)):
-                    # get product
-                    step[j] *= rest[i]
-                # pad with zeroes to match degree of term
-                step += [0] * (len(rest) - i - 1)
-                stepPoly.data = step
-                # add step to current answer
-                output += stepPoly
-
-            # recurse if still not fully reduced
-            if output.deg() >= m.deg():
-                return output % m
-            # else return with reduced terms
-            return output % self.m
+            # if len(self.data) < degm:
+            #     return Poly(self.data, self.m) % self.m
+            # m.trim()
+            # # lc*x^(degm) + (bx^j + ... + c) = 0 => lc*x^(degm) = -bx^j - ... - c
+            # lcm = m.lc()
+            #
+            # # shift everything except lc to right hand side
+            # rhs = m.data[1:]
+            #
+            # # lc * x ^ (degm) = -bx ^ j - ... - c => x^(degm) -b/lc * x^j - ... - c/lc
+            # for i in range(len(rhs)):
+            #     rhs[i] = 0 - rhs[i] // lcm
+            #
+            # # get poly as list
+            # data = self.data
+            # # get everything to the right of x^(degm) term
+            # output = Poly(self.data[-degm + 1:], self.m)
+            # # get everything else to get x^(degm) (f*x^(deg-1) + ... + g)
+            # rest = data[:-degm + 1]
+            #
+            # # Create a step poly before the loop and adjust its data instead of creating a new
+            # # one each iteration (saves ~0.4 seconds):
+            # stepPoly = Poly([0], self.m)
+            # # for each term in the rest get product with rhs for substitution
+            # for i in range(len(rest)):
+            #     step = rhs.copy()
+            #     # for each term in rhs
+            #     for j in range(len(step)):
+            #         # get product
+            #         step[j] *= rest[i]
+            #     # pad with zeroes to match degree of term
+            #     step += [0] * (len(rest) - i - 1)
+            #     stepPoly.data = step
+            #     # add step to current answer
+            #     output += stepPoly
+            #
+            # # recurse if still not fully reduced
+            # if output.deg() >= m.deg():
+            #     return output % m
+            # # else return with reduced terms
+            # return output % self.m
+            return (self.copy() / m)[1]
 
     # < for poly
     def __lt__(self, other):
@@ -358,7 +359,7 @@ class Poly:
         return True
 
     # def shift_first_element(self, d):
-    #     deg = self.deg()
+    #     deg = len(self) - 1
     #     if d < deg:
     #         raise ValueError('d must be larger than current degree')
     #     self.data.reverse()
@@ -367,15 +368,14 @@ class Poly:
     #     self.data[-1], self.data[deg] = self.data[deg], 0
     #     self.data.reverse()
     #
-    # def irreducible(self):
-    #     q = 0 # ???????
-    #     print('X^' + str(q) + ' - X')
-    #     x = Poly('X^' + str(q) + ' - X')
-    #     t = 1
-    #     while self.gcd(x) == 1:
-    #         x.shift_first_element(q)
-    #         t += 1
-    #     return t == q
+    #     def irreducible(self):
+    #         q = self.m
+    #         poly = Poly("X^" + str(self.m) + "-X", self.m)
+    #         for t in range(1, self.deg()):
+    #             if self.gcd(poly) != Poly(1, self.m):
+    #                 return False
+    #             poly.shift_first_element(q * t)
+    #         return True
 
 
 # modular inverse of an integer
@@ -389,18 +389,44 @@ def modular_inverse(n: int, mod, return_poly=False):
             else:
                 return i
     raise AssertionError
-    
+
+
 #Find irreducible polynomial of degree n in Z/modZ
-def findIrred(mod: int, deg:int):
-    f = [0] * deg
-    for n in range(1, mod - 1):
-        f[0] = n
-        for d in range(1, deg - 1):
-            for m in range(0, mod - 1):
-                f[d] = m
-                poly = Poly(f, m)
-                if poly.irreducible():
-                    return poly
+def find_irred(m: int, deg:int):
+    if deg < 0:
+        raise ValueError('Degree must 0 or higher')
+
+    data = [0] * (deg + 1)
+    found_polys = []
+    for n in range(1, m):
+        data[0] = n
+        poly = Poly(data, m)
+        found = find_irred_step(poly, deg)
+        if len(found) > 0:
+            found_polys += found
+    if len(found_polys) == 0:
+        raise ValueError('No such polynomial exists')
+
+    output_polys = []
+    for x in found_polys:
+        if x not in output_polys:
+            output_polys.append(x)
+    return output_polys
+
+
+def find_irred_step(poly: Poly, d) -> (Poly, bool):
+    found_polys = []
+    if poly.irreducible():
+        found_polys.append(poly)
+    if d == 0:
+        return found_polys
+    for n in range(0, poly.m):
+        newPoly = poly.copy()
+        newPoly.data[d] = n
+        found = find_irred_step(newPoly, d - 1)
+        if len(found) > 0:
+            found_polys += found
+    return found_polys
 
 # print(Poly('6X^5+5X^3+5X^2+2X+2', 3))
 # print(Poly('X^2+X', 5).pow(15))
@@ -413,3 +439,5 @@ def findIrred(mod: int, deg:int):
 
 
 # print(Poly('X^3-X+2').trim(), Poly([0,0,0,10,2,0,1]))
+
+# print(Poly('X^4+X^3+1', 2).irreducible())

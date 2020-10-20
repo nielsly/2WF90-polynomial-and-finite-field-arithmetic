@@ -2,8 +2,8 @@ import json
 
 import asn1tools as asn
 
-from Field import Field
-from Poly import Poly, findIrred
+from Field import *
+from Poly import *
 
 ### STUDENT PERSPECTIVE (example) ###
 
@@ -32,7 +32,7 @@ for exercise in my_exercises['exercises']:
     params = exercise[1]  # get parameters
 
     if operation == 'display-poly':
-        poly = Poly(params['f'], m=params['mod'])
+        poly = Poly(params['f'], params['mod'])
         own_answer = str(poly)
 
         print("{} :".format(exercise))
@@ -41,8 +41,8 @@ for exercise in my_exercises['exercises']:
         params['answer'] = own_answer
 
     if operation == 'add-poly':
-        poly = Poly(params['f'], m=params['mod'])
-        poly2 = Poly(params['g'], m=params['mod'])
+        poly = Poly(params['f'], params['mod'])
+        poly2 = Poly(params['g'], params['mod'])
         own_answer, own_answer_poly = str(poly + poly2), (poly + poly2).data
 
         print("{} :".format(exercise))
@@ -54,8 +54,8 @@ for exercise in my_exercises['exercises']:
         params['answer-poly'] = own_answer_poly
 
     if operation == 'subtract-poly':
-        poly = Poly(params['f'], m=params['mod'])
-        poly2 = Poly(params['g'], m=params['mod'])
+        poly = Poly(params['f'], params['mod'])
+        poly2 = Poly(params['g'], params['mod'])
         own_answer, own_answer_poly = str(poly - poly2), (poly - poly2).data
 
         print("{} :".format(exercise))
@@ -67,8 +67,8 @@ for exercise in my_exercises['exercises']:
         params['answer-poly'] = own_answer_poly
 
     if operation == 'multiply-poly':
-        poly = Poly(params['f'], m=params['mod'])
-        poly2 = Poly(params['g'], m=params['mod'])
+        poly = Poly(params['f'], params['mod'])
+        poly2 = Poly(params['g'], params['mod'])
         own_answer, own_answer_poly = str(poly * poly2), (poly * poly2).data
 
         print("{} :".format(exercise))
@@ -80,8 +80,8 @@ for exercise in my_exercises['exercises']:
         params['answer-poly'] = own_answer_poly
 
     if operation == 'long-div-poly':
-        poly = Poly(params['f'], m=params['mod'])
-        poly2 = Poly(params['g'], m=params['mod'])
+        poly = Poly(params['f'], params['mod'])
+        poly2 = Poly(params['g'], params['mod'])
 
         try:
             ans_q, ans_r = poly / poly2
@@ -102,8 +102,8 @@ for exercise in my_exercises['exercises']:
         params['answ-r-poly'] = answ_r_poly
 
     if operation == 'euclid-poly':
-        poly = Poly(params['f'], m=params['mod'])
-        poly2 = Poly(params['g'], m=params['mod'])
+        poly = Poly(params['f'], params['mod'])
+        poly2 = Poly(params['g'], params['mod'])
 
         try:
             ans_a, ans_b, ans_d = poly.euclid(poly2)
@@ -130,9 +130,9 @@ for exercise in my_exercises['exercises']:
         params['answ-d-poly'] = answ_d_poly
 
     if operation == 'equals-poly-mod':
-        poly = Poly(params['f'], m=params['mod'])
-        poly2 = Poly(params['g'], m=params['mod'])
-        poly3 = Poly(params['h'], m=params['mod'])
+        poly = Poly(params['f'], params['mod'])
+        poly2 = Poly(params['g'], params['mod'])
+        poly3 = Poly(params['h'], params['mod'])
 
         own_answer = poly.poly_mod_eq(poly2, poly3)
 
@@ -143,7 +143,7 @@ for exercise in my_exercises['exercises']:
         params['answer'] = own_answer
 
     if operation == 'irreducible':
-        poly = Poly(params['f'], m=params['mod'])
+        poly = Poly(params['f'], params['mod'])
         own_answer = poly.irreducible()
 
         print("{} :".format(exercise))
@@ -154,8 +154,14 @@ for exercise in my_exercises['exercises']:
     if operation == 'find-irred':
         deg = params['deg']
         mod = params['mod']
-        poly = findIrred(mod, deg)
-        own_answer, own_answer_poly = str(poly.data), poly.data
+
+        own_answer, own_answer_poly = 0, [0]
+
+        polys = find_irred(mod, deg)
+        for x in polys:
+            if params['answer-poly'] == x.data:
+                own_answer, own_answer_poly = str(x), x.data
+                break
 
         print("{} :".format(exercise))
         print(
@@ -167,8 +173,8 @@ for exercise in my_exercises['exercises']:
 
     if operation == 'add-field':
         field = Field(params['mod'], params['mod-poly'])
-        poly = Poly(params['a'], m=params['mod'])
-        poly2 = Poly(params['b'], m=params['mod'])
+        poly = Poly(params['a'], params['mod'])
+        poly2 = Poly(params['b'], params['mod'])
         own_answer, own_answer_poly = str(field.add(poly, poly2)), (field.add(poly, poly2)).data
 
         print("{} :".format(exercise))
@@ -181,8 +187,8 @@ for exercise in my_exercises['exercises']:
 
     if operation == 'subtract-field':
         field = Field(params['mod'], params['mod-poly'])
-        poly = Poly(params['a'], m=params['mod'])
-        poly2 = Poly(params['b'], m=params['mod'])
+        poly = Poly(params['a'], params['mod'])
+        poly2 = Poly(params['b'], params['mod'])
         own_answer, own_answer_poly = str(field.subtract(poly, poly2)), (field.subtract(poly, poly2)).data
 
         print("{} :".format(exercise))
@@ -195,8 +201,8 @@ for exercise in my_exercises['exercises']:
         
     if operation == 'multiply-field':
         field = Field(params['mod'], params['mod-poly'])
-        poly = Poly(params['a'], m=params['mod'])
-        poly2 = Poly(params['b'], m=params['mod'])
+        poly = Poly(params['a'], params['mod'])
+        poly2 = Poly(params['b'], params['mod'])
         own_answer, own_answer_poly = str(field.multiply(poly, poly2)), (field.multiply(poly, poly2)).data
 
         print("{} :".format(exercise))
@@ -210,7 +216,7 @@ for exercise in my_exercises['exercises']:
 
     if operation == 'inverse-field':
         field = Field(params['mod'], params['mod-poly'])
-        poly = Poly(params['a'], m=params['mod'])
+        poly = Poly(params['a'], params['mod'])
         try:
             own_answer, own_answer_poly = str(field.inverse(poly)), (field.inverse(poly)).data
         except AssertionError:
@@ -226,8 +232,8 @@ for exercise in my_exercises['exercises']:
 
     if operation == 'division-field':
         field = Field(params['mod'], params['mod-poly'])
-        poly = Poly(params['a'], m=params['mod'])
-        poly2 = Poly(params['b'], m=params['mod'])
+        poly = Poly(params['a'], params['mod'])
+        poly2 = Poly(params['b'], params['mod'])
         try:
             own_answer, own_answer_poly = str(field.divide(poly, poly2)), (field.divide(poly, poly2)).data
         except AssertionError:
@@ -243,8 +249,8 @@ for exercise in my_exercises['exercises']:
 
     if operation == 'equals-field':
         field = Field(params['mod'], params['mod-poly'])
-        poly = Poly(params['a'], m=params['mod'])
-        poly2 = Poly(params['b'], m=params['mod'])
+        poly = Poly(params['a'], params['mod'])
+        poly2 = Poly(params['b'], params['mod'])
         own_answer = field.equals(poly, poly2)
 
         print("{} :".format(exercise))
@@ -256,7 +262,7 @@ for exercise in my_exercises['exercises']:
 
     if operation == 'primitive':
         field = Field(params['mod'], params['mod-poly'])
-        poly = Poly(params['a'], m=params['mod'])
+        poly = Poly(params['a'], params['mod'])
         own_answer = field.is_primitive(poly)
 
         print("{} :".format(exercise))

@@ -15,6 +15,7 @@ class Field:
     def reduce(self, f: Poly):
         return f % self.poly
 
+    # Get all elements of a field
     def elements(self):
         elements = []
         poly_data = [0] * (self.poly.deg())
@@ -71,7 +72,7 @@ class Field:
     def equals(self, f: Poly, g: Poly):
         return (f % self.poly) == (g % self.poly)
 
-    # Divide two polynomials in a field
+    # Divide two polynomials in a field (not sure if it will work for 100% of the problems
     def divide(self, f: Poly, g: Poly):
         assert g != Poly([0])  # Make sure we don't divide by zero
 
@@ -140,6 +141,7 @@ def get_prime_factors(n):
     return factors
 
 
+# Format the table in the same way as the answer
 def poly_table_pretty(polys: list):
     for i in range(0, len(polys)):
         for j in range(0, len(polys)):
@@ -147,6 +149,7 @@ def poly_table_pretty(polys: list):
     return polys
 
 
+# Replace the polynomials in the table with an array of their coefficients, so we can print it correctly
 def poly_table(polys: list):
     for i in range(0, len(polys)):
         for j in range(0, len(polys)):

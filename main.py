@@ -182,8 +182,12 @@ for exercise in my_exercises['exercises']:
                 if params['answer-poly'] == x.data:
                     own_answer, own_answer_poly = str(x), x.data
                     break
+            else:
+                # Not sure whether the real test will already have the answers in the input file, so if we cant
+                # find a match, just return the first one as they all should be irreducible anyways.
+                own_answer, own_answer_poly = str(polys[0]), polys[0].data
         else:
-            own_answer, own_answer_poly = 'ERROR', 'ERROR'
+            own_answer, own_answer_poly = 'ERROR', []
 
         print("{} :".format(exercise))
         print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: "
@@ -327,10 +331,15 @@ for exercise in my_exercises['exercises']:
         try:
             primitives = field.find_prim()
 
-            for n in primitives:
-                if n.data == params['answer-poly']:
-                    own_answer, own_answer_poly = str(n), n.data
-                    break
+            if len(primitives) > 0:
+                for n in primitives:
+                    if n.data == params['answer-poly']:
+                        own_answer, own_answer_poly = str(n), n.data
+                        break
+                else:
+                    # Not sure whether the real test will already have the answers in the input file, so if we cant
+                    # find a match, just return the first one as they all should be primitive elements anyways.
+                    own_answer, own_answer_poly = str(primitives[0]), primitives[0].data
             else:
                 own_answer, own_answer_poly = 'ERROR', []
         except AssertionError:

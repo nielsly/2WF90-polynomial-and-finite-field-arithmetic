@@ -77,7 +77,7 @@ class Field:
     def divide(self, f: Poly, g: Poly):
         assert g != Poly([0])  # Make sure we don't divide by zero
 
-        # First m out the polynomials modulus to make sure we are working with the polynomials in their smallest form
+        # First mod out the polynomials modulus to make sure we are working with the polynomials in their smallest form
         poly1 = self.reduce(f)
         poly2 = self.reduce(g)
         if (poly1 / poly2)[1] != Poly([0]):  # Check whether rest is zero
@@ -108,7 +108,7 @@ class Field:
         p = get_prime_divisors(q - 1)
         k = len(p)
         i = 0
-        while i < k and self.reduce(a.pow((q - 1) // p[i])) != Poly(i, self.m):
+        while i < k and self.reduce(a.pow((q - 1) // p[i])) != Poly(1, self.m):
             i += 1
 
         return False if i < k else True

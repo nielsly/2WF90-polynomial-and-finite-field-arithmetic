@@ -26,10 +26,34 @@ exercise_file.close()  # close file
 # Create answer JSON
 my_answers = {'exercises': []}
 
+known_primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
+
 # Loop over exercises and solve
 for exercise in my_exercises['exercises']:
     operation = exercise[0]  # get operation type
     params = exercise[1]  # get parameters
+
+    # Simple prime check for the modulo. We use a pre-generated list of primes, since we know p < 100:
+    # Also check if the mod poly is irreducible in case of a field operation
+    if params['mod'] not in known_primes or (
+            'mod-poly' in params and not Poly(params['mod-poly'], params['mod']).irreducible()):
+        if operation in ['equals-poly-mod', 'irreducible', 'equals-field', 'primitive']:
+            params['my_answer'] = False
+        elif operation == 'display_poly':
+            params['my_answer'] = "ERROR"
+        elif operation == 'long-div-poly':
+            params['answ-q'], params['answ-q-poly'] = "ERROR", []
+            params['answ-r'], params['answ-r-poly'] = "ERROR", []
+        elif operation == "euclid-poly":
+            params['answ-a'], params['answ-a-poly'] = "ERROR", []
+            params['answ-b'], params['answ-b-poly'] = "ERROR", []
+            params['answ-d'], params['answ-d-poly'] = "ERROR", []
+        else:
+            params['answer'], params['answer-poly'] = "ERROR", []
+
+        print("Caught invalid argument(s) for {} \n".format(exercise))
+        my_answers['exercises'].append({operation: params})
+        continue
 
     if operation == 'display-poly':
         poly = Poly(params['f'], params['mod'])
@@ -302,13 +326,15 @@ for exercise in my_exercises['exercises']:
         field = Field(params['mod'], params['mod-poly'])
         try:
             primitives = field.find_prim()
+
+            for n in primitives:
+                if n.data == params['answer-poly']:
+                    own_answer, own_answer_poly = str(n), n.data
+                    break
+            else:
+                own_answer, own_answer_poly = 'ERROR', []
         except AssertionError:
             own_answer, own_answer_poly = 'ERROR', []
-
-        for n in primitives:
-            if n.data == params['answer-poly']:
-                own_answer, own_answer_poly = str(n), n.data
-                break
 
         print("{} :".format(exercise))
         print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: "

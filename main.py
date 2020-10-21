@@ -12,7 +12,7 @@ from Poly import *
 
 base_location = './'
 ops_loc = base_location + 'operations.asn'
-exs_loc = base_location + 'input.ops'
+exs_loc = base_location + 'input.txt'
 
 # Compile specification
 spec = asn.compile_files(ops_loc, codec="jer")
@@ -341,6 +341,6 @@ for exercise in my_exercises['exercises']:
     my_answers['exercises'].append({operation: params})
 
     # After each operation, save exercises with answers to file as a kind of checkpoint
-    my_file = open(base_location + "output.ops", "wb+")  # write to binary file
+    my_file = open(base_location + "output.txt", "wb+")  # write to binary file
     my_file.write(json.dumps(my_answers).encode())  # add encoded exercise list
     my_file.close()

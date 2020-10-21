@@ -1,9 +1,18 @@
-import random
+from random import randint
+
+known_primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
+
 
 class Poly:
-    # initialise the Poly, inputs can be int, list or string,degree is used if a single integer/empty string is entered
+    # initialise the Poly, inputs can be int, list or string
+    # modulus must be a prime int or 0, if it is 0 then we don't ever reduce the numbers
+    # degree is used if a single integer/empty string is entered
     def __init__(self, a: int or list or str, m: int = 0, degree=0):
-        self.m = m
+        # simple prime check for the modulo. We use a pre-generated list of primes, since we know p < 100:
+        if m != 0 and m not in known_primes:
+            raise ValueError("Modulus is not prime")
+
+        self.m: int = m
         if type(a) == str:
             a = a.split(' ')
             if len(a) == 1:
@@ -50,23 +59,23 @@ class Poly:
                                 else int('-' + spl[0][:-1])
                 else:
                     p[degree] = int(spl[0]) if a[i - 1] == '+' else int('-' + spl[0])
-            self.data = p
+            self.data: list = p
         elif type(a) == int:
             if degree < 0:
                 raise ValueError('When declaring a Poly with an int, a non-negative degree is also required.')
-            self.data = [0] * (degree + 1)
+            self.data: list = [0] * (degree + 1)
             self.data[0] = a
         elif type(a) == list:
             if m != 0:
                 for i in range(len(a)):
                     a[i] %= m
-            self.data = a
+            self.data: list = a
             self.trim()
         else:
             raise TypeError('Type Poly requires type str, int or list, not ' + str(type(a)))
 
     # degree of poly
-    def deg(self):
+    def deg(self) -> int:
         # return (length of data - index of first non-zero element) - 1
         for i, e in enumerate(self.data):
             if e != 0:
@@ -75,7 +84,7 @@ class Poly:
         return -1
 
     # leading coefficient
-    def lc(self):
+    def lc(self) -> int:
         # return first non-zero element
         for n in self.data:
             if n != 0:
@@ -84,7 +93,7 @@ class Poly:
         return 0
 
     # string representation of poly, has spaces
-    def __str__(self, spaces=False):
+    def __str__(self, spaces=False) -> str:
         degree = self.deg()
         self.data.reverse()
         out = ""
@@ -116,6 +125,9 @@ class Poly:
 
     # * for poly
     def __mul__(self, other):
+        if type(other) == int:
+            other = Poly(other, self.m)
+
         n = len(self)
         m = len(other)
         ap, bp = self.data.copy(), other.data.copy()
@@ -131,6 +143,9 @@ class Poly:
 
     # + for poly
     def __add__(self, other):
+        if type(other) == int:
+            other = Poly(other, self.m)
+
         ap, bp = self.data.copy(), other.data.copy()
         ap.reverse(), bp.reverse()
         while len(ap) - 1 < other.deg():
@@ -142,6 +157,9 @@ class Poly:
 
     # - for poly
     def __sub__(self, other):
+        if type(other) == int:
+            other = Poly(other, self.m)
+
         ap, bp = self.data.copy(), other.data.copy()
         ap.reverse(), bp.reverse()
         while len(ap) - 1 < other.deg():
@@ -158,7 +176,11 @@ class Poly:
     # modular long division for polynomials
     # based on algorithm 2.2.6 of the reader with adjustments made for modular arithmetic
     def __truediv__(self, other):
-        assert (other > Poly(0, self.m) and self.m > 0)
+        if type(other) == int:
+            other = Poly(other, self.m)
+
+        if other == 0:
+            raise ZeroDivisionError("Division by zero attempted on " + str(self) + " and " + str(other) + ".")
 
         q = [0] * len(self)
         r = self.copy()
@@ -188,9 +210,9 @@ class Poly:
     # extended euclidean algorithm for polynomials
     # Based on algorithm 2.2.11 from the script
     def euclid(self, other):
-        x, v, y, u = Poly([1], self.m), Poly([1], self.m), Poly([0], self.m), Poly([0], self.m)
+        x, v, y, u = Poly(1, self.m), Poly(1, self.m), Poly(0, self.m), Poly(0, self.m)
         a, b = self.copy(), other.copy()
-        while b > Poly(0, self.m):
+        while b > 0:
             q, r = a / b
             a = b
             b = r
@@ -204,9 +226,9 @@ class Poly:
         a_inv = modular_inverse(a.lc(), self.m, True)
         a = x * a_inv
         b = y * a_inv
-        return a, b, a * self + b * other
+        return a, b, self * a + other * b
 
-    def __len__(self):
+    def __len__(self) -> int:
         # return length of data - index of first non-zero element
         for i, e in enumerate(self.data):
             if e != 0:
@@ -230,6 +252,7 @@ class Poly:
                     a[i] %= m
                 return Poly(a, self.m)
             else:
+                # the polynomial taken mod 0 gives the polynomial itself
                 return self
         elif type(m) == Poly:
             degm = m.deg() + 1
@@ -280,15 +303,21 @@ class Poly:
             return (self.copy() / m)[1]
 
     # < for poly
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
+        if type(other) == int:
+            other = Poly(other, self.m)
         return other > self
 
     # <= for poly
-    def __le__(self, other):
+    def __le__(self, other) -> bool:
+        if type(other) == int:
+            other = Poly(other, self.m)
         return other >= self
 
     # > for poly
-    def __gt__(self, other):
+    def __gt__(self, other) -> bool:
+        if type(other) == int:
+            other = Poly(other, self.m)
         s = self.copy()
         deg_s = s.deg()
         deg_o = other.deg()
@@ -300,7 +329,9 @@ class Poly:
         return s.lc() > 0
 
     # >= for poly
-    def __ge__(self, other):
+    def __ge__(self, other) -> bool:
+        if type(other) == int:
+            other = Poly(other, self.m)
         s = self.copy()
         deg_s = s.deg()
         deg_o = other.deg()
@@ -312,17 +343,20 @@ class Poly:
         return s.lc() >= 0
 
     # != for poly
-    def __ne__(self, other):
+    def __ne__(self, other) -> bool:
+        if type(other) == int:
+            other = Poly(other, self.m)
         return not self == other
 
     # == for poly
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
+        if type(other) == int:
+            other = Poly(other, self.m)
         s = self.copy()
         s -= other % self.m
         return s.lc() == 0
 
-    # power for poly
-    # m is een integer hier, niet een polynomial, polynomial m nog implementen
+    # power for poly with n being an integer
     def pow(self, n: int):
         x = self.copy()
         z = Poly('1', self.m)
@@ -391,13 +425,13 @@ def modular_inverse(n: int, m, return_poly=False) -> Poly or int:
     raise AssertionError
 
 
-#Find irreducible polynomial of degree n in Z/modZ
-def find_irred(m: int, deg:int) -> list:
+# Find irreducible polynomial of degree n in Z/modZ
+def find_irred(m: int, deg: int, give_all=True) -> list or Poly:
     if deg < 0:
         raise ValueError('Degree must 0 or higher')
 
-    data = [0] * (deg + 1)
     found_polys = []
+    data = [0] * (deg + 1)
     for n in range(1, m):
         data[0] = n
         poly = Poly(data, m)
@@ -407,26 +441,30 @@ def find_irred(m: int, deg:int) -> list:
     if len(found_polys) == 0:
         raise ValueError('No such polynomial exists')
 
+    # the code above may give duplicates, we remove these
     output_polys = []
     for x in found_polys:
         if x not in output_polys:
             output_polys.append(x)
-    return output_polys
+    if give_all:
+        return output_polys
+    return output_polys[randint(0, len(output_polys) - 1)]
 
 
-def find_irred_step(poly: Poly, d) -> (Poly, bool):
+def find_irred_step(poly: Poly, d: int) -> list:
     found_polys = []
     if poly.irreducible():
         found_polys.append(poly)
     if d == 0:
         return found_polys
     for n in range(0, poly.m):
-        newPoly = poly.copy()
-        newPoly.data[d] = n
-        found = find_irred_step(newPoly, d - 1)
+        new_poly = poly.copy()
+        new_poly.data[d] = n
+        found = find_irred_step(new_poly, d - 1)
         if len(found) > 0:
             found_polys += found
     return found_polys
+
 
 # print(Poly('6X^5+5X^3+5X^2+2X+2', 3))
 # print(Poly('X^2+X', 5).pow(15))

@@ -16,13 +16,17 @@ class Field:
 
         # Simple prime check for the modulo. We use a pre-generated list of primes, since we know p < 100:
         if m not in known_primes:
-            raise ValueError("Modulus is not prime")
+            raise ValueError("Modulus is not prime!")
 
         self.m: int = m
         if type(poly) == list:
             self.poly: Poly = Poly(poly, self.m)
         else:
             self.poly: Poly = poly
+
+        # Check if the polynomial modulus is irreducible
+        if not self.poly.irreducible():
+            raise ValueError("Polynomial modulus is not irreducible!")
 
     def order(self) -> int:
         """
@@ -200,7 +204,6 @@ class Field:
         :param give_all: Whether to return all primitives or just one. If False, a random one will be selected.
         :return: A list of primitive elements of this field or a single primitive element.
         """
-        assert (self.poly.irreducible())
 
         irreducibles = []
         primitives = []

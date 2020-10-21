@@ -1,6 +1,8 @@
 from random import randint
 
-from Poly import Poly, known_primes, find_irred
+from Poly import Poly, find_irred
+
+known_primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
 
 
 class Field:

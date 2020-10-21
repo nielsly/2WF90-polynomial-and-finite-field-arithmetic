@@ -1,17 +1,11 @@
 from random import randint
 
-known_primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
-
 
 class Poly:
     # initialise the Poly, inputs can be int, list or string
     # modulus must be a prime int or 0, if it is 0 then we don't ever reduce the numbers
     # degree is used if a single integer/empty string is entered
     def __init__(self, a: int or list or str, m: int = 0, degree=0):
-        # simple prime check for the modulo. We use a pre-generated list of primes, since we know p < 100:
-        if m != 0 and m not in known_primes:
-            raise ValueError("Modulus is not prime")
-
         self.m: int = m
         if type(a) == str:
             a = a.split(' ')

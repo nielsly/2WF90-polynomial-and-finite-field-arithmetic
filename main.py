@@ -340,7 +340,7 @@ for exercise in my_exercises['exercises']:
     # Save answer
     my_answers['exercises'].append({operation: params})
 
-    # After each operation, save exercises with answers to file as a kind of checkpoint
-    my_file = open(base_location + "output.txt", "wb+")  # write to binary file
-    my_file.write(json.dumps(my_answers).encode())  # add encoded exercise list
-    my_file.close()
+# Save answers to file
+my_file = open(base_location + "output.txt", "wb+")  # write to binary file
+my_file.write(json.dumps(my_answers).encode())  # add encoded exercise list
+my_file.close()

@@ -28,20 +28,18 @@ exercise_file.close()  # close file
 my_answers = {'exercises': []}
 
 
-def answer_with_polys(own_answer, own_answer_poly):
-    print("{} :".format(exercise))
-    print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: "
-          "[{}]\n".format(own_answer == params['answer'] and own_answer_poly == params['answer-poly'], own_answer,
-                          params['answer'], own_answer_poly, params['answer-poly']))
+def answer_with_poly(s, p):
+    print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer poly: [{}] - Correct answer poly: [{}]\n"
+          .format(s == params['answer'] and p == params['answer-poly'], s, params['answer'], p, params['answer-poly']))
 
-    params['answer'], params['answer-poly'] = own_answer, own_answer_poly
+    params['answer'], params['answer-poly'] = s, p
 
 
 def try_except_with_polys(func):
     try:
         a = func()
         return a
-    except (ValueError, AssertionError, ZeroDivisionError):
+    except (ValueError, AssertionError, ZeroDivisionError, TypeError):
         return "ERROR", []
 
 
@@ -51,53 +49,62 @@ for exercise in my_exercises['exercises']:
     params = exercise[1]  # get parameters
 
     if operation == 'display-poly':
+        print("{} :".format(exercise))
+
         try:
             poly = Poly(params['f'], params['mod'])
 
             own_answer = str(poly)
-        except (ValueError, AssertionError, ZeroDivisionError):
+        except (ValueError, AssertionError, ZeroDivisionError, TypeError):
             own_answer = "ERROR"
 
-        print("{} :".format(exercise))
         print("Correct: {} - Own answer: [{}] - Correct answer: [{}]\n"
               .format(own_answer == params['answer'], own_answer, params['answer']))
 
         params['answer'] = own_answer
 
     if operation == 'add-poly':
+        print("{} :".format(exercise))
+
         try:
             poly = Poly(params['f'], params['mod'])
             poly2 = Poly(params['g'], params['mod'])
 
             own_answer, own_answer_poly = str(poly + poly2), (poly + poly2).data
-        except (ValueError, AssertionError, ZeroDivisionError):
+        except (ValueError, AssertionError, ZeroDivisionError, TypeError):
             own_answer, own_answer_poly = "ERROR", []
 
-        answer_with_polys(own_answer, own_answer_poly)
+        answer_with_poly(own_answer, own_answer_poly)
 
     if operation == 'subtract-poly':
+        print("{} :".format(exercise))
+
         try:
             poly = Poly(params['f'], params['mod'])
             poly2 = Poly(params['g'], params['mod'])
 
             own_answer, own_answer_poly = str(poly - poly2), (poly - poly2).data
-        except (ValueError, AssertionError, ZeroDivisionError):
+        except (ValueError, AssertionError, ZeroDivisionError, TypeError):
             own_answer, own_answer_poly = "ERROR", []
 
-        answer_with_polys(own_answer, own_answer_poly)
+        answer_with_poly(own_answer, own_answer_poly)
 
     if operation == 'multiply-poly':
-        poly = Poly(params['f'], params['mod'])
-        poly2 = Poly(params['g'], params['mod'])
+        print("{} :".format(exercise))
 
         try:
+            poly = Poly(params['f'], params['mod'])
+            poly2 = Poly(params['g'], params['mod'])
+
             own_answer, own_answer_poly = str(poly * poly2), (poly * poly2).data
-        except (ValueError, AssertionError, ZeroDivisionError):
+        except (ValueError, AssertionError, ZeroDivisionError, TypeError):
             own_answer, own_answer_poly = "ERROR", []
 
-        answer_with_polys(own_answer, own_answer_poly)
+        answer_with_poly(own_answer, own_answer_poly)
 
     if operation == 'long-div-poly':
+        print("{} :".format(exercise))
+
         try:
             poly = Poly(params['f'], params['mod'])
             poly2 = Poly(params['g'], params['mod'])
@@ -105,11 +112,10 @@ for exercise in my_exercises['exercises']:
             ans_q, ans_r = poly / poly2
             answ_q, answ_q_poly = str(ans_q), ans_q.data
             answ_r, answ_r_poly = str(ans_r), ans_r.data
-        except (ValueError, AssertionError, ZeroDivisionError):
+        except (ValueError, AssertionError, ZeroDivisionError, TypeError):
             answ_q, answ_q_poly = "ERROR", []
             answ_r, answ_r_poly = "ERROR", []
 
-        print("{} :".format(exercise))
         print("Correct: {} - Own answer: [{}] - Correct answer: [{}] || Own answer r: [{}] - Correct answer r: [{}]\n"
               .format(answ_q == params['answ-q'] and answ_q_poly == params['answ-q-poly'] and answ_r ==
                       params['answ-r'] and answ_r_poly == params['answ-r-poly'], answ_q, params['answ-q'], answ_r,
@@ -119,6 +125,8 @@ for exercise in my_exercises['exercises']:
         params['answ-r'], params['answ-r-poly'] = answ_r, answ_r_poly
 
     if operation == 'euclid-poly':
+        print("{} :".format(exercise))
+
         try:
             poly = Poly(params['f'], params['mod'])
             poly2 = Poly(params['g'], params['mod'])
@@ -127,12 +135,11 @@ for exercise in my_exercises['exercises']:
             answ_a, answ_a_poly = str(ans_a), ans_a.data
             answ_b, answ_b_poly = str(ans_b), ans_b.data
             answ_d, answ_d_poly = str(ans_d), ans_d.data
-        except (ValueError, AssertionError, ZeroDivisionError):
+        except (ValueError, AssertionError, ZeroDivisionError, TypeError):
             answ_a, answ_a_poly = "ERROR", []
             answ_b, answ_b_poly = "ERROR", []
             answ_d, answ_d_poly = "ERROR", []
 
-        print("{} :".format(exercise))
         print("Correct: {} - Own answer a: [{}] - Correct answer a: [{}] || Own answer b: [{}] - Correct answer b: "
               "[{}] || Own answer d: [{}] - Correct answer d: [{}]\n"
               .format(answ_a == params['answ-a'] and answ_a_poly == params['answ-a-poly'] and answ_b == params['answ-b']
@@ -145,41 +152,45 @@ for exercise in my_exercises['exercises']:
         params['answ-d'], params['answ-d-poly'] = answ_d, answ_d_poly
 
     if operation == 'equals-poly-mod':
+        print("{} :".format(exercise))
+
         try:
             poly = Poly(params['f'], params['mod'])
             poly2 = Poly(params['g'], params['mod'])
             poly3 = Poly(params['h'], params['mod'])
 
             own_answer = poly.poly_mod_eq(poly2, poly3)
-        except (ValueError, AssertionError, ZeroDivisionError):
+        except (ValueError, AssertionError, ZeroDivisionError, TypeError):
             own_answer = False
 
-        print("{} :".format(exercise))
         print("Correct: {} - Own answer: [{}] - Correct answer: [{}]\n".format(own_answer == params['answer'],
                                                                                own_answer, params['answer']))
 
         params['answer'] = own_answer
 
     if operation == 'irreducible':
+        print("{} :".format(exercise))
+
         try:
             poly = Poly(params['f'], params['mod'])
 
             own_answer = poly.irreducible()
-        except (ValueError, AssertionError, ZeroDivisionError):
+        except (ValueError, AssertionError, ZeroDivisionError, TypeError):
             own_answer = False
 
-        print("{} :".format(exercise))
         print("Correct: {} - Own answer: [{}] - Correct answer: [{}]\n"
               .format(own_answer == params['answer'], own_answer, params['answer']))
 
         params['answer'] = own_answer
 
     if operation == 'find-irred':
+        print("{} :".format(exercise))
+
         deg = params['deg']
         mod = params['mod']
 
         try:
-            polys = find_irred(mod, deg)
+            polys = find_irred(mod, deg, True)
             if len(polys) > 0:
                 for x in polys:
                     if params['answer-poly'] == x.data:
@@ -191,133 +202,153 @@ for exercise in my_exercises['exercises']:
                     own_answer, own_answer_poly = str(polys[rand]), polys[rand].data
             else:
                 own_answer, own_answer_poly = 'ERROR', []
-        except (ValueError, AssertionError, ZeroDivisionError):
+        except (ValueError, AssertionError, ZeroDivisionError, TypeError):
             own_answer, own_answer_poly = "ERROR", []
 
-        answer_with_polys(own_answer, own_answer_poly)
+        answer_with_poly(own_answer, own_answer_poly)
 
     if operation == 'add-table':
+        print("{} :".format(exercise))
+
         try:
             field = Field(params['mod'], params['mod-poly'])
 
             own_answer, own_answer_poly = poly_table_pretty(field.add_table()), poly_table(field.add_table())
-        except (ValueError, AssertionError, ZeroDivisionError):
+        except (ValueError, AssertionError, ZeroDivisionError, TypeError):
             own_answer, own_answer_poly = "ERROR", []
 
-        answer_with_polys(own_answer, own_answer_poly)
+        answer_with_poly(own_answer, own_answer_poly)
 
     if operation == 'mult-table':
+        print("{} :".format(exercise))
+
         try:
             field = Field(params['mod'], params['mod-poly'])
 
             own_answer, own_answer_poly = poly_table_pretty(field.mult_table()), poly_table(field.mult_table())
-        except (ValueError, AssertionError, ZeroDivisionError):
+        except (ValueError, AssertionError, ZeroDivisionError, TypeError):
             own_answer, own_answer_poly = "ERROR", []
 
-        answer_with_polys(own_answer, own_answer_poly)
+        answer_with_poly(own_answer, own_answer_poly)
 
     if operation == 'display-field':
+        print("{} :".format(exercise))
+
         try:
             field = Field(params['mod'], params['mod-poly'])
             poly = Poly(params['a'], params['mod'])
 
             own_answer, own_answer_poly = str(field.display(poly)), field.display(poly).data
-        except (ValueError, AssertionError, ZeroDivisionError):
+        except (ValueError, AssertionError, ZeroDivisionError, TypeError):
             own_answer, own_answer_poly = "ERROR", []
 
-        answer_with_polys(own_answer, own_answer_poly)
+        answer_with_poly(own_answer, own_answer_poly)
 
     if operation == 'add-field':
+        print("{} :".format(exercise))
+
         try:
             field = Field(params['mod'], params['mod-poly'])
             poly = Poly(params['a'], params['mod'])
             poly2 = Poly(params['b'], params['mod'])
 
             own_answer, own_answer_poly = str(field.add(poly, poly2)), (field.add(poly, poly2)).data
-        except (ValueError, AssertionError, ZeroDivisionError):
+        except (ValueError, AssertionError, ZeroDivisionError, TypeError):
             own_answer, own_answer_poly = "ERROR", []
 
-        answer_with_polys(own_answer, own_answer_poly)
+        answer_with_poly(own_answer, own_answer_poly)
 
     if operation == 'subtract-field':
+        print("{} :".format(exercise))
+
         try:
             field = Field(params['mod'], params['mod-poly'])
             poly = Poly(params['a'], params['mod'])
             poly2 = Poly(params['b'], params['mod'])
 
             own_answer, own_answer_poly = str(field.subtract(poly, poly2)), (field.subtract(poly, poly2)).data
-        except (ValueError, AssertionError, ZeroDivisionError):
+        except (ValueError, AssertionError, ZeroDivisionError, TypeError):
             own_answer, own_answer_poly = "ERROR", []
 
-        answer_with_polys(own_answer, own_answer_poly)
+        answer_with_poly(own_answer, own_answer_poly)
 
     if operation == 'multiply-field':
+        print("{} :".format(exercise))
+
         try:
             field = Field(params['mod'], params['mod-poly'])
             poly = Poly(params['a'], params['mod'])
             poly2 = Poly(params['b'], params['mod'])
 
             own_answer, own_answer_poly = str(field.multiply(poly, poly2)), (field.multiply(poly, poly2)).data
-        except (ValueError, AssertionError, ZeroDivisionError):
+        except (ValueError, AssertionError, ZeroDivisionError, TypeError):
             own_answer, own_answer_poly = "ERROR", []
 
-        answer_with_polys(own_answer, own_answer_poly)
+        answer_with_poly(own_answer, own_answer_poly)
 
     if operation == 'inverse-field':
+        print("{} :".format(exercise))
+
         try:
             field = Field(params['mod'], params['mod-poly'])
             poly = Poly(params['a'], params['mod'])
 
             own_answer, own_answer_poly = str(field.inverse(poly)), (field.inverse(poly)).data
-        except (ValueError, AssertionError, ZeroDivisionError):
+        except (ValueError, AssertionError, ZeroDivisionError, TypeError):
             own_answer, own_answer_poly = "ERROR", []
 
-        answer_with_polys(own_answer, own_answer_poly)
+        answer_with_poly(own_answer, own_answer_poly)
 
     if operation == 'division-field':
+        print("{} :".format(exercise))
+
         try:
             field = Field(params['mod'], params['mod-poly'])
             poly = Poly(params['a'], params['mod'])
             poly2 = Poly(params['b'], params['mod'])
 
             own_answer, own_answer_poly = str(field.divide(poly, poly2)), (field.divide(poly, poly2)).data
-        except (ValueError, AssertionError, ZeroDivisionError):
+        except (ValueError, AssertionError, ZeroDivisionError, TypeError):
             own_answer, own_answer_poly = "ERROR", []
 
-        answer_with_polys(own_answer, own_answer_poly)
+        answer_with_poly(own_answer, own_answer_poly)
 
     if operation == 'equals-field':
+        print("{} :".format(exercise))
+
         try:
             field = Field(params['mod'], params['mod-poly'])
             poly = Poly(params['a'], params['mod'])
             poly2 = Poly(params['b'], params['mod'])
 
             own_answer = field.equals(poly, poly2)
-        except (ValueError, AssertionError, ZeroDivisionError):
+        except (ValueError, AssertionError, ZeroDivisionError, TypeError):
             own_answer = False
 
-        print("{} :".format(exercise))
         print("Correct: {} - Own answer: [{}] - Correct answer: [{}]\n".format(own_answer == params['answer'],
                                                                                own_answer, params['answer']))
 
         params['answer'] = own_answer
 
     if operation == 'primitive':
+        print("{} :".format(exercise))
+
         try:
             field = Field(params['mod'], params['mod-poly'])
             poly = Poly(params['a'], params['mod'])
 
             own_answer = field.is_primitive(poly)
-        except (ValueError, AssertionError, ZeroDivisionError):
+        except (ValueError, AssertionError, ZeroDivisionError, TypeError):
             own_answer = False
 
-        print("{} :".format(exercise))
         print("Correct: {} - Own answer: [{}] - Correct answer: [{}]\n".format(own_answer == params['answer'],
                                                                                own_answer, params['answer']))
 
         params['answer'] = own_answer
 
     if operation == 'find-prim':
+        print("{} :".format(exercise))
+
         try:
             field = Field(params['mod'], params['mod-poly'])
 
@@ -333,10 +364,10 @@ for exercise in my_exercises['exercises']:
                     own_answer, own_answer_poly = str(primitives[rand]), primitives[rand].data
             else:
                 own_answer, own_answer_poly = 'ERROR', []
-        except (ValueError, AssertionError, ZeroDivisionError):
+        except (ValueError, AssertionError, ZeroDivisionError, TypeError):
             own_answer, own_answer_poly = "ERROR", []
 
-        answer_with_polys(own_answer, own_answer_poly)
+        answer_with_poly(own_answer, own_answer_poly)
 
     # Save answer
     my_answers['exercises'].append({operation: params})

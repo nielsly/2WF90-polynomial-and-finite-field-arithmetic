@@ -1,5 +1,4 @@
 from random import randint
-
 from Poly import Poly, find_irred
 
 known_primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
@@ -13,7 +12,6 @@ class Field:
         :param m: Modulus of the field
         :param poly: Polynomial modulus of the field
         """
-
         # Simple prime check for the modulo. We use a pre-generated list of primes, since we know p < 100:
         if m not in known_primes:
             raise ValueError("Modulus is not prime!")
@@ -204,11 +202,10 @@ class Field:
         :param give_all: Whether to return all primitives or just one. If False, a random one will be selected.
         :return: A list of primitive elements of this field or a single primitive element.
         """
-
         irreducibles = []
         primitives = []
         for d in range(0, self.poly.deg()):
-            irreducibles += find_irred(self.m, d)
+            irreducibles += find_irred(self.m, d, True)
         for n in irreducibles:
             if self.is_primitive(n):
                 primitives.append(n)

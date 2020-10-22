@@ -352,7 +352,7 @@ for exercise in my_exercises['exercises']:
         try:
             field = Field(params['mod'], params['mod-poly'])
 
-            primitives = field.find_prim()
+            primitives = field.find_prim(True)
             if len(primitives) > 0:
                 for n in primitives:
                     if n.data == params['answer-poly']:

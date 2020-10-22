@@ -196,7 +196,7 @@ class Field:
 
         return i >= k
 
-    def find_prim(self, give_all: bool = True) -> list or Poly:
+    def find_prim(self, give_all: bool = False) -> list or Poly:
         """
         Find a primitive element in this field. Based on algorithm 4.4.4
         :param give_all: Whether to return all primitives or just one. If False, a random one will be selected.

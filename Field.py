@@ -52,7 +52,7 @@ class Field:
         elements = []
         poly_data = [0] * (self.poly.deg())
 
-        # We will treat this problem as if we are trying to print a decimal number in radix X
+        # We will treat this problem as if we are trying to print a decimal number in radix mod*X
         # We simply loop over all possible decimal numbers and then transform them into polynomials
         for i in range(0, self.order()):
             i_copy = i
